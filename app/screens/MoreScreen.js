@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
 
@@ -40,3 +41,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+MoreScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

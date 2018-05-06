@@ -19,6 +19,10 @@ export default class AllMoviesScreen extends Component {
   };
 
   componentDidMount() {
+    this.getUser();
+  }
+
+  getUser = async () => {
     Auth.currentUserInfo()
       .then((data) => {
         this.setState({
@@ -26,13 +30,18 @@ export default class AllMoviesScreen extends Component {
         });
       })
       .catch(err => console.log('error: ', err));
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Welcome {this.state.username}</Text>
-        <Text>All movies...</Text>
+        <Text>Movies:</Text>
+        <Text>1. The Dark Knight</Text>
+        <Text>2. Inception</Text>
+        <Text>3. Avengers</Text>
+        <Text>4. District 9</Text>
+        <Text>5. Star Wars</Text>
       </View>
     );
   }
