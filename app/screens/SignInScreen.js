@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
@@ -15,22 +17,42 @@ export default class SignInScreen extends Component {
   };
 
   state = {
-    email: '',
+    username: '',
     password: '',
+    authCode: '',
+    user: {},
   };
 
   updateDetails = (key, value) => {
     this.setState({ [key]: value });
   };
 
+  signIn = () => {
+    Auth.signIn(this.state.username, this.state.password)
+      .then((user) => {
+        this.setState({ user });
+        console.log(user);
+      })
+      .catch(err => console.log(err));
+  };
+
+  confirmSignIn = () => {
+    Auth.confirmSignIn(this.state.user, this.state.authCode, 'SMS_MFA')
+      .then((data) => {
+        this.props.navigation.navigate('App');
+        console.log(data);
+      })
+      .catch(err => console.log(err));
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Email:</Text>
+        <Text>Username:</Text>
         <Input
-          placeholder="bob@gmail.com"
-          onChangeText={text => this.updateDetails('email', text)}
-          value={this.state.email}
+          placeholder="Bob"
+          onChangeText={text => this.updateDetails('username', text)}
+          value={this.state.username}
         />
         <Text>Password:</Text>
         <Input
@@ -39,11 +61,17 @@ export default class SignInScreen extends Component {
           value={this.state.password}
           secureTextEntry
         />
+        <Button title="Sign In" onPress={this.signIn} style={{ backgroundColor: 'steelblue' }} />
+        <Text>Confirm Sign In:</Text>
+        <Input
+          placeholder="******"
+          onChangeText={text => this.updateDetails('authCode', text)}
+          value={this.state.authCode}
+          secureTextEntry
+        />
         <Button
           title="Sign In"
-          onPress={() => {
-            console.log('Sign In');
-          }}
+          onPress={this.confirmSignIn}
           style={{ backgroundColor: 'steelblue' }}
         />
       </View>
@@ -59,3 +87,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+SignInScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

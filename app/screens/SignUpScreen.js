@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -21,7 +22,7 @@ export default class SignUpScreen extends Component {
     phone_number: '',
     password: '',
     authCode: '',
-    user: {},
+    // user: {},
   };
 
   updateDetails = (key, value) => {
@@ -46,7 +47,10 @@ export default class SignUpScreen extends Component {
 
   confirmSignUp = () => {
     Auth.confirmSignUp(this.state.username, this.state.authCode)
-      .then(() => console.log('Confirm user sign up success!!'))
+      .then(() => {
+        this.props.navigation.navigate('App');
+        console.log('Confirm user sign up success!!');
+      })
       .catch(err => console.log('Error confirming signing up user: ', err));
   };
 
@@ -103,3 +107,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+SignUpScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

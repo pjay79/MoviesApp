@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { Auth } from 'aws-amplify';
 import PropTypes from 'prop-types';
 
 class AuthLoadingScreen extends Component {
