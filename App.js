@@ -1,7 +1,7 @@
 import React from 'react';
 import Amplify from 'aws-amplify';
 import MainNavigator from './app/routes/MainNavigator';
-import config from './app/config/aws-exports';
+import config from './app/aws-exports';
 
 Amplify.configure(config);
 

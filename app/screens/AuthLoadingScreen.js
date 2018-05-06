@@ -13,7 +13,7 @@ class AuthLoadingScreen extends Component {
 
   checkUser = async () => {
     // check if user is logged in
-    const userToken = true;
+    const userToken = false;
     // if user is logged in navigate to the App stack, if not navigate to Auth stack
     this.props.navigation.navigate(userToken ? 'App' : 'Auth');
   };
