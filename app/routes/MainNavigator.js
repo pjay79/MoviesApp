@@ -1,6 +1,7 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+import PropTypes from 'prop-types';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {
   createStackNavigator,
   createBottomTabNavigator,
@@ -14,6 +15,16 @@ import AllMoviesScreen from '../screens/AllMoviesScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import AddMoviesScreen from '../screens/AddMoviesScreen';
 import MoreScreen from '../screens/MoreScreen';
+
+const AllMoviesIcon = ({ tintColor }) => (
+  <MaterialCommunityIcons name="book-multiple" size={20} color={tintColor} />
+);
+
+const AddMoviesIcon = ({ tintColor }) => (
+  <MaterialCommunityIcons name="book-plus" size={20} color={tintColor} />
+);
+
+const MoreIcon = ({ tintColor }) => <SimpleLineIcons name="options" size={20} color={tintColor} />;
 
 const AllMoviesStack = createStackNavigator(
   {
@@ -56,19 +67,19 @@ const MoviesTabs = createBottomTabNavigator(
     'All Movies': {
       screen: AllMoviesStack,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Icon name="book-multiple" size={24} color={tintColor} />,
+        tabBarIcon: AllMoviesIcon,
       },
     },
     'Add Movie': {
       screen: AddMoviesStack,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Icon name="book-plus" size={24} color={tintColor} />,
+        tabBarIcon: AddMoviesIcon,
       },
     },
     More: {
       screen: MoreStack,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Icon2 name="options" size={24} color={tintColor} />,
+        tabBarIcon: MoreIcon,
       },
     },
   },
@@ -121,3 +132,15 @@ export default createSwitchNavigator(
     initialRouteName: 'AuthLoading',
   },
 );
+
+AllMoviesIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
+AddMoviesIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
+MoreIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};

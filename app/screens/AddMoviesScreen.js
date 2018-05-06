@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class AddMoviesScreen extends Component {
   static navigationOptions = {
@@ -12,7 +11,6 @@ export default class AddMoviesScreen extends Component {
       color: 'white',
     },
     headerLeft: null,
-    tabBarIcon: ({ tintColor }) => <Icon name="book-plus" size={24} color={tintColor} />,
   };
 
   render() {
