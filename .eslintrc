@@ -1,0 +1,28 @@
+{
+  // Use the AirBnB JS styleguide - https://github.com/airbnb/javascript
+  "extends": "airbnb",
+  // We use 'babel-eslint' mainly for React Native Classes
+  "parser": "babel-eslint",
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ios.js", ".android.js"]
+      }
+    }
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+    "jest": true,
+    "es6": true,
+  },
+  // We can add/overwrite custom rules here
+  rules: {
+    // React Native has JSX in JS files
+    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
+    // React Native includes images via require('../images/example.png')
+    'global-require': 'off',
+    'no-console': 0,
+    "no-use-before-define": 0,
+  },
+}
