@@ -3,7 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
-import listMovies from '../graphql/queries/listMovies';
+
+import ListMovies from '../graphql/queries/listMovies';
 
 class AllMoviesScreen extends Component {
   static navigationOptions = {
@@ -17,10 +18,6 @@ class AllMoviesScreen extends Component {
     headerLeft: null,
   };
 
-  state = {
-    username: '',
-  };
-
   componentDidMount = async () => {
     this.getUser();
   };
@@ -28,9 +25,7 @@ class AllMoviesScreen extends Component {
   getUser = async () => {
     Auth.currentUserInfo()
       .then((data) => {
-        this.setState({
-          username: data.username,
-        });
+        console.log('Logged in User details: ', data);
       })
       .catch(err => console.log('error: ', err));
   };
@@ -38,9 +33,8 @@ class AllMoviesScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Welcome {this.state.username}</Text>
-        {this.props.movies.map(movie => (
-          <View key={movie.id} style={styles.movieWrapper}>
+        {this.props.movies.map((movie, index) => (
+          <View key={index} style={styles.movieWrapper}>
             <Text>{movie.title}</Text>
             <Text>{movie.genre}</Text>
             <Text>{movie.director}</Text>
@@ -64,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default graphql(listMovies, {
+export default graphql(ListMovies, {
   options: {
     fetchPolicy: 'cache-and-network',
   },

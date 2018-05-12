@@ -25,7 +25,7 @@ export default class SignUpScreen extends Component {
     // user: {},
   };
 
-  updateDetails = (key, value) => {
+  onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
 
@@ -60,25 +60,25 @@ export default class SignUpScreen extends Component {
         <Text>Username:</Text>
         <Input
           placeholder="Bob"
-          onChangeText={text => this.updateDetails('username', text)}
+          onChangeText={text => this.onChangeText('username', text)}
           value={this.state.username}
         />
         <Text>Email:</Text>
         <Input
           placeholder="bob@gmail.com"
-          onChangeText={text => this.updateDetails('email', text)}
+          onChangeText={text => this.onChangeText('email', text)}
           value={this.state.email}
         />
         <Text>Phone number:</Text>
         <Input
           placeholder="+61XXXXXXXX"
-          onChangeText={text => this.updateDetails('phone_number', text)}
+          onChangeText={text => this.onChangeText('phone_number', text)}
           value={this.state.phone_number}
         />
         <Text>Password:</Text>
         <Input
           placeholder="********"
-          onChangeText={text => this.updateDetails('password', text)}
+          onChangeText={text => this.onChangeText('password', text)}
           value={this.state.password}
           secureTextEntry
         />
@@ -86,7 +86,7 @@ export default class SignUpScreen extends Component {
         <Text>Auth code:</Text>
         <Input
           placeholder="******"
-          onChangeText={text => this.updateDetails('authCode', text)}
+          onChangeText={text => this.onChangeText('authCode', text)}
           value={this.state.authCode}
         />
         <Button

@@ -16,7 +16,7 @@ class AuthLoadingScreen extends Component {
     Auth.currentAuthenticatedUser()
       .then((user) => {
         this.props.navigation.navigate(user ? 'App' : 'Auth');
-        console.log('user: ', user);
+        console.log('Cognito: ', user);
       })
       .catch((err) => {
         this.props.navigation.navigate('Auth');

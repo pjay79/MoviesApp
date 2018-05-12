@@ -23,7 +23,7 @@ export default class SignInScreen extends Component {
     user: {},
   };
 
-  updateDetails = (key, value) => {
+  onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
 
@@ -51,13 +51,13 @@ export default class SignInScreen extends Component {
         <Text>Username:</Text>
         <Input
           placeholder="Bob"
-          onChangeText={text => this.updateDetails('username', text)}
+          onChangeText={text => this.onChangeText('username', text)}
           value={this.state.username}
         />
         <Text>Password:</Text>
         <Input
           placeholder="********"
-          onChangeText={text => this.updateDetails('password', text)}
+          onChangeText={text => this.onChangeText('password', text)}
           value={this.state.password}
           secureTextEntry
         />
@@ -65,7 +65,7 @@ export default class SignInScreen extends Component {
         <Text>Confirm Sign In:</Text>
         <Input
           placeholder="******"
-          onChangeText={text => this.updateDetails('authCode', text)}
+          onChangeText={text => this.onChangeText('authCode', text)}
           value={this.state.authCode}
           secureTextEntry
         />
