@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Auth } from 'aws-amplify';
+import { graphql } from 'react-apollo';
+import listMovies from '../graphql/queries/listMovies';
 
-export default class AllMoviesScreen extends Component {
+class AllMoviesScreen extends Component {
   static navigationOptions = {
     title: 'All Movies',
     headerStyle: {
@@ -18,9 +20,9 @@ export default class AllMoviesScreen extends Component {
     username: '',
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
     this.getUser();
-  }
+  };
 
   getUser = async () => {
     Auth.currentUserInfo()
@@ -36,12 +38,13 @@ export default class AllMoviesScreen extends Component {
     return (
       <View style={styles.container}>
         <Text>Welcome {this.state.username}</Text>
-        <Text>Movies:</Text>
-        <Text>1. The Dark Knight</Text>
-        <Text>2. Inception</Text>
-        <Text>3. Avengers</Text>
-        <Text>4. District 9</Text>
-        <Text>5. Star Wars</Text>
+        {this.props.movies.map(movie => (
+          <View key={movie.id} style={styles.movieWrapper}>
+            <Text>{movie.title}</Text>
+            <Text>{movie.genre}</Text>
+            <Text>{movie.director}</Text>
+          </View>
+        ))}
       </View>
     );
   }
@@ -52,5 +55,34 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 10,
+  },
+  movieWrapper: {
+    alignItems: 'center',
+    marginVertical: 5,
   },
 });
+
+export default graphql(listMovies, {
+  options: {
+    fetchPolicy: 'cache-and-network',
+  },
+  props: props => ({
+    movies: props.data.listMovies ? props.data.listMovies.items : [],
+    // subscribeToNewRecipes: (params) => {
+    //   props.data.subscribeToMore({
+    //     document: NewRecipeSubscription,
+    //     updateQuery: (prev, { subscriptionData: { data: { onCreateRecipe } } }) => ({
+    //       ...prev,
+    //       listMovies: {
+    //         __typename: 'RecipeConnection',
+    //         items: [
+    //           onCreateRecipe,
+    //           ...prev.listMovies.items.filter(recipe => recipe.id !== onCreateRecipe.id),
+    //         ],
+    //       },
+    //     }),
+    //   });
+    // },
+  }),
+})(AllMoviesScreen);

@@ -9,8 +9,13 @@
   "dependencies": {
     "aws-amplify": "^0.3.3",
     "aws-amplify-react-native": "^0.2.9",
+    "aws-appsync": "^1.0.19",
+    "aws-appsync-react": "^1.0.10",
+    "aws-sdk": "^2.238.1",
+    "graphql-tag": "^2.9.2",
     "prop-types": "^15.6.1",
     "react": "16.3.1",
+    "react-apollo": "^2.1.4",
     "react-native": "0.55.3",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^2.0.0-rc.9"
