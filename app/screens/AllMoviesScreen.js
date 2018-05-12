@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
 import listMovies from '../graphql/queries/listMovies';
@@ -69,20 +70,9 @@ export default graphql(listMovies, {
   },
   props: props => ({
     movies: props.data.listMovies ? props.data.listMovies.items : [],
-    // subscribeToNewRecipes: (params) => {
-    //   props.data.subscribeToMore({
-    //     document: NewRecipeSubscription,
-    //     updateQuery: (prev, { subscriptionData: { data: { onCreateRecipe } } }) => ({
-    //       ...prev,
-    //       listMovies: {
-    //         __typename: 'RecipeConnection',
-    //         items: [
-    //           onCreateRecipe,
-    //           ...prev.listMovies.items.filter(recipe => recipe.id !== onCreateRecipe.id),
-    //         ],
-    //       },
-    //     }),
-    //   });
-    // },
   }),
 })(AllMoviesScreen);
+
+AllMoviesScreen.propTypes = {
+  movies: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+};

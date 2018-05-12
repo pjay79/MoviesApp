@@ -11,6 +11,7 @@ export default gql(`
         reviews {
           rating
           content
+          createdAt
           author
         }
       }
