@@ -33,8 +33,8 @@ class AllMoviesScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.props.movies.map((movie, index) => (
-          <View key={index} style={styles.movieWrapper}>
+        {this.props.movies.map(movie => (
+          <View key={movie.id} style={styles.movieWrapper}>
             <Text>{movie.title}</Text>
             <Text>{movie.genre}</Text>
             <Text>{movie.director}</Text>

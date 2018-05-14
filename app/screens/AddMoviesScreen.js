@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
+import { Auth } from 'aws-amplify';
+import uuidV4 from 'uuid/v4';
+import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
@@ -24,15 +27,33 @@ class AddMoviesScreen extends Component {
     title: '',
     genre: '',
     director: '',
+    author: '',
+  };
+
+  componentDidMount = async () => {
+    this.getUser();
   };
 
   onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
 
+  getUser = async () => {
+    Auth.currentUserInfo()
+      .then((data) => {
+        this.setState({ author: data.username });
+      })
+      .catch(err => console.log('error: ', err));
+  };
+
   addMovie = () => {
-    const { title, genre, director } = this.state;
+    const {
+      title, genre, director, author,
+    } = this.state;
     this.props.onAdd({
+      id: uuidV4(),
+      createdAt: moment().format('MMMM Do YYYY, h:mm:ss a'),
+      author,
       title,
       genre,
       director,
@@ -93,13 +114,24 @@ export default graphql(CreateMovie, {
           __typename: 'Mutation',
           createMovie: { ...movie, __typename: 'Movie' },
         },
-        update: (proxy, { data: { createMovie } }) => {
-          const data = proxy.readQuery({ query: ListMovies });
-          data.listMovies.items.push(createMovie);
-          proxy.writeQuery({ query: ListMovies, data });
-        },
       }),
   }),
+  options: {
+    update: (proxy, { data: { createMovie } }) => {
+      try {
+        const data = proxy.readQuery({
+          query: ListMovies,
+          variables: {
+            reviews: [],
+          },
+        });
+        data.items.push(createMovie);
+        proxy.writeQuery({ query: ListMovies, data });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 })(AddMoviesScreen);
 
 AddMoviesScreen.propTypes = {
