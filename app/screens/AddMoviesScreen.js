@@ -8,8 +8,8 @@ import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-import CreateMovie from '../graphql/mutations/createMovie';
-import ListMovies from '../graphql/queries/listMovies';
+import CreateMovie from '../graphql/mutations/CreateMovie';
+import ListMovies from '../graphql/queries/ListMovies';
 
 class AddMoviesScreen extends Component {
   static navigationOptions = {
@@ -50,15 +50,19 @@ class AddMoviesScreen extends Component {
     const {
       title, genre, director, author,
     } = this.state;
+    const id = uuidV4();
+    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     this.props.onAdd({
-      id: uuidV4(),
-      createdAt: moment().format('MMMM Do YYYY, h:mm:ss a'),
-      author,
+      id,
       title,
       genre,
       director,
+      author,
+      createdAt,
+      reviews: [],
     });
-    console.log('Movie has been added.');
+    console.log(`The movie "${title}" has been added.`);
+    console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${author}`);
     this.setState({
       title: '',
       genre: '',
@@ -115,23 +119,12 @@ export default graphql(CreateMovie, {
           createMovie: { ...movie, __typename: 'Movie' },
         },
       }),
+    // update: (proxy, { data: { createMovie } }) => {
+    //   const data = proxy.readQuery({ query: ListMovies });
+    //   data.listMovies.items.unshift(createMovie);
+    //   proxy.writeQuery({ query: ListMovies, data });
+    // },
   }),
-  options: {
-    update: (proxy, { data: { createMovie } }) => {
-      try {
-        const data = proxy.readQuery({
-          query: ListMovies,
-          variables: {
-            reviews: [],
-          },
-        });
-        data.items.push(createMovie);
-        proxy.writeQuery({ query: ListMovies, data });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
 })(AddMoviesScreen);
 
 AddMoviesScreen.propTypes = {

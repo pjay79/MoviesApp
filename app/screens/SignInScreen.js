@@ -31,6 +31,8 @@ export default class SignInScreen extends Component {
     Auth.signIn(this.state.username, this.state.password)
       .then((user) => {
         this.setState({ user });
+        // Skip MFA with this...
+        this.props.navigation.navigate('App');
         console.log(user);
       })
       .catch(err => console.log(err));
