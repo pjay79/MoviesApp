@@ -15,6 +15,8 @@ const Input = ({
       onChangeText={onChangeText}
       value={value}
       secureTextEntry={secureTextEntry}
+      autoCorrect={false}
+      autoCapitalize="none"
     />
   </View>
 );

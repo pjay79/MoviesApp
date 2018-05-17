@@ -119,12 +119,22 @@ export default graphql(CreateMovie, {
           createMovie: { ...movie, __typename: 'Movie' },
         },
       }),
-    // update: (proxy, { data: { createMovie } }) => {
-    //   const data = proxy.readQuery({ query: ListMovies });
-    //   data.listMovies.items.unshift(createMovie);
-    //   proxy.writeQuery({ query: ListMovies, data });
-    // },
   }),
+  options: {
+    refetchQueries: [{ query: ListMovies }],
+    update: (proxy, { data: { createMovie } }) => {
+      try {
+        const data = proxy.readQuery({ query: ListMovies });
+        data.listMovies.items = [
+          ...data.listMovies.items.filter(movie => movie.id !== createMovie.id),
+          createMovie,
+        ];
+        proxy.writeQuery({ query: ListMovies, data });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 })(AddMoviesScreen);
 
 AddMoviesScreen.propTypes = {

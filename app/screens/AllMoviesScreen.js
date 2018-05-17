@@ -61,9 +61,6 @@ const styles = StyleSheet.create({
 });
 
 export default graphql(ListMovies, {
-  options: {
-    fetchPolicy: 'cache-and-network',
-  },
   props: props => ({
     movies: props.data.listMovies ? props.data.listMovies.items : [],
     // subscribeToNewMovies: () => {
@@ -86,6 +83,9 @@ export default graphql(ListMovies, {
     //   }
     // },
   }),
+  options: {
+    fetchPolicy: 'cache-and-network',
+  },
 })(AllMoviesScreen);
 
 AllMoviesScreen.propTypes = {
