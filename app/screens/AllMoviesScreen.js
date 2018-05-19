@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ListMovies from '../graphql/queries/ListMovies';
 // import NewMovieSubscription from '../graphql/subscriptions/NewMovieSubscription';
 
@@ -41,12 +41,20 @@ class AllMoviesScreen extends Component {
   renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => this.onPressItem(item)}>
       <View key={item.id} style={styles.itemWrapper}>
-        <Text>{item.title}</Text>
-        <Text>{item.genre}</Text>
-        <Text>{item.director}</Text>
+        <View>
+          <Text>{item.title}</Text>
+          <Text>{item.genre}</Text>
+          <Text>{item.director}</Text>
+        </View>
+        <View>
+          <Icon name="trash-o" size={14} color="black" style={styles.iconStyle} />
+          <Icon name="edit" size={14} color="black" style={styles.iconStyle} />
+        </View>
       </View>
     </TouchableOpacity>
   );
+
+  renderSeparator = () => <View style={styles.separator} />;
 
   render() {
     return (
@@ -55,6 +63,7 @@ class AllMoviesScreen extends Component {
           data={this.props.movies}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          ItemSeparatorComponent={this.renderSeparator}
         />
       </View>
     );
@@ -64,13 +73,20 @@ class AllMoviesScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingTop: 10,
   },
   itemWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
+    margin: 10,
+  },
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'lightgray',
+  },
+  iconStyle: {
+    marginBottom: 5,
   },
 });
 
