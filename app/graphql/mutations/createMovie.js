@@ -2,11 +2,11 @@ import gql from 'graphql-tag';
 
 export default gql(`
   mutation createMovie(
-      $id: String!
+      $id: ID!,
       $title: String!,
       $genre: String!,
-      $director: String!
-      $author: String!
+      $director: String!,
+      $author: String!,
       $createdAt: String!
     ) {
     createMovie(input: {

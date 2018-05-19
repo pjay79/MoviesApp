@@ -59,7 +59,7 @@ class AddMoviesScreen extends Component {
       director,
       author,
       createdAt,
-      reviews: [],
+      // reviews: [],
     });
     console.log(`The movie "${title}" has been added.`);
     console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${author}`);
