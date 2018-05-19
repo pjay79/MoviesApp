@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
@@ -32,16 +32,24 @@ class AllMoviesScreen extends Component {
       .catch(err => console.log('error: ', err));
   };
 
+  keyExtractor = item => item.id;
+
+  renderItem = ({ item }) => (
+    <View key={item.id} style={styles.itemWrapper}>
+      <Text>{item.title}</Text>
+      <Text>{item.genre}</Text>
+      <Text>{item.director}</Text>
+    </View>
+  );
+
   render() {
     return (
       <View style={styles.container}>
-        {this.props.movies.map(movie => (
-          <View key={movie.id} style={styles.movieWrapper}>
-            <Text>{movie.title}</Text>
-            <Text>{movie.genre}</Text>
-            <Text>{movie.director}</Text>
-          </View>
-        ))}
+        <FlatList
+          data={this.props.movies}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderItem}
+        />
       </View>
     );
   }
@@ -54,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
-  movieWrapper: {
+  itemWrapper: {
     alignItems: 'center',
     marginVertical: 5,
   },
