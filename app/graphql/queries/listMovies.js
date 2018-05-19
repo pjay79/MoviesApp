@@ -8,12 +8,8 @@ export default gql(`
         title
         genre
         director
-        reviews {
-          rating
-          content
-          createdAt
-          author
-        }
+        author
+        createdAt
       }
     }
   }`);
