@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Platform, TouchableOpacity, View, Text } from 'react-native';
+import { Platform, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BackIcon from 'react-native-vector-icons/Ionicons';
 
@@ -7,7 +8,7 @@ export default class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Details',
     headerStyle: {
-      backgroundColor: 'lightpink',
+      backgroundColor: 'steelblue',
       elevation: 0,
       borderBottomWidth: 0,
     },
@@ -26,10 +27,27 @@ export default class DetailsScreen extends Component {
   });
 
   render() {
+    const { navigation } = this.props;
+    const movie = navigation.getParam('movie', 'NO-ID');
     return (
-      <View>
-        <Text>Add movies...</Text>
+      <View style={styles.container}>
+        <Text>{movie.title}</Text>
+        <Text>{movie.director}</Text>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+DetailsScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

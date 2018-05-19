@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
@@ -24,6 +24,10 @@ class AllMoviesScreen extends Component {
     // this.props.subscribeToNewMovies();
   };
 
+  onPressItem = (item) => {
+    this.props.navigation.navigate('Details', { movie: item });
+  };
+
   getUser = async () => {
     Auth.currentUserInfo()
       .then((data) => {
@@ -35,11 +39,13 @@ class AllMoviesScreen extends Component {
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
-    <View key={item.id} style={styles.itemWrapper}>
-      <Text>{item.title}</Text>
-      <Text>{item.genre}</Text>
-      <Text>{item.director}</Text>
-    </View>
+    <TouchableOpacity onPress={() => this.onPressItem(item)}>
+      <View key={item.id} style={styles.itemWrapper}>
+        <Text>{item.title}</Text>
+        <Text>{item.genre}</Text>
+        <Text>{item.director}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   render() {
@@ -98,5 +104,8 @@ export default graphql(ListMovies, {
 
 AllMoviesScreen.propTypes = {
   movies: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
   // subscribeToNewMovies: PropTypes.func.isRequired,
 };
