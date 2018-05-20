@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Platform, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BackIcon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Details',
+    title: navigation.getParam('movie').title,
     headerStyle: {
       backgroundColor: 'steelblue',
       elevation: 0,
@@ -14,7 +15,7 @@ export default class DetailsScreen extends Component {
     },
     headerLeft: (
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <BackIcon
+        <Ionicons
           name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
           size={30}
           color="white"
@@ -22,8 +23,15 @@ export default class DetailsScreen extends Component {
         />
       </TouchableOpacity>
     ),
+    headerRight: (
+      <TouchableOpacity onPress={() => navigation.navigate('Update')}>
+        <FontAwesome name="edit" size={20} color="white" style={{ marginRight: 10 }} />
+      </TouchableOpacity>
+    ),
     headerTintColor: 'white',
-    tabBarIcon: ({ tintColor }) => <Icon name="book-open-variant" size={24} color={tintColor} />,
+    tabBarIcon: ({ tintColor }) => (
+      <MaterialCommunityIcons name="book-open-variant" size={24} color={tintColor} />
+    ),
   });
 
   render() {

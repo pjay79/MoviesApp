@@ -4,6 +4,7 @@ import App from './App';
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
   'Module RCTImageLoader requires',
+  'Class RCTCxxModule',
 ]);
 
 AppRegistry.registerComponent('MoviesApp', () => App);

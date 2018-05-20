@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ListMovies from '../graphql/queries/ListMovies';
 import DeleteMovie from '../graphql/mutations/DeleteMovie';
 
@@ -42,21 +43,23 @@ class AllMoviesScreen extends Component {
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
-    // <TouchableOpacity onPress={() => this.onPressItem(item)}>
     <View key={item.id} style={styles.itemWrapper}>
       <View>
-        <Text>{item.title}</Text>
-        <Text>{item.genre}</Text>
-        <Text>{item.director}</Text>
+        <TouchableOpacity onPress={() => this.onPressItem(item)}>
+          <Text>{item.title}</Text>
+          <Text>{item.genre}</Text>
+          <Text>{item.director}</Text>
+        </TouchableOpacity>
       </View>
       <View>
         <TouchableOpacity onPress={() => this.deleteMovie(item)}>
-          <Icon name="trash-o" size={16} color="black" style={styles.iconStyle} />
+          <FontAwesome name="trash-o" size={16} color="black" style={styles.iconStyle} />
         </TouchableOpacity>
-        <Icon name="edit" size={14} color="black" style={styles.iconStyle} />
+        <TouchableOpacity onPress={() => console.log('Favourite added!')}>
+          <MaterialIcons name="favorite" size={14} color="black" style={styles.iconStyle} />
+        </TouchableOpacity>
       </View>
     </View>
-    // </TouchableOpacity>
   );
 
   renderSeparator = () => <View style={styles.separator} />;

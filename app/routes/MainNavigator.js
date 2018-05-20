@@ -13,6 +13,7 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import AllMoviesScreen from '../screens/AllMoviesScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import UpdateMovieScreen from '../screens/UpdateMovieScreen';
 import AddMoviesScreen from '../screens/AddMoviesScreen';
 import MoreScreen from '../screens/MoreScreen';
 
@@ -33,6 +34,9 @@ const AllMoviesStack = createStackNavigator(
     },
     Details: {
       screen: DetailsScreen,
+    },
+    Update: {
+      screen: UpdateMovieScreen,
     },
   },
   {
