@@ -142,7 +142,10 @@ export default graphql(UpdateMovie, {
     update: (proxy, { data: { updateMovie } }) => {
       try {
         const data = proxy.readQuery({ query: ListMovies });
-        data.listMovies.items = [updateMovie];
+        data.listMovies.items = [
+          ...data.listMovies.items.filter(movie => movie.id !== updateMovie.id),
+          updateMovie,
+        ];
         proxy.writeQuery({ query: ListMovies, data });
       } catch (error) {
         console.log(error);
