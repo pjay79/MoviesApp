@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { graphql } from 'react-apollo';
 import { Auth } from 'aws-amplify';
+import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
@@ -37,6 +38,7 @@ class UpdateMovieScreen extends Component {
     genre: '',
     director: '',
     author: '',
+    createdAt: '',
   };
 
   componentDidMount = async () => {
@@ -59,17 +61,19 @@ class UpdateMovieScreen extends Component {
   updateState = () => {
     const { navigation } = this.props;
     const movie = navigation.getParam('movie');
+    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     this.setState({
       id: movie.id,
       title: movie.title,
       genre: movie.genre,
       director: movie.director,
+      createdAt,
     });
   };
 
   updateMovie = () => {
     const {
-      id, title, genre, director, author,
+      id, title, genre, director, author, createdAt,
     } = this.state;
     this.props.onUpdate({
       id,
@@ -77,14 +81,10 @@ class UpdateMovieScreen extends Component {
       genre,
       director,
       author,
+      createdAt,
     });
     console.log(`The movie "${title}" has been updated.`);
-    this.setState({
-      title: '',
-      genre: '',
-      director: '',
-    });
-    this.props.navigation.navigate('Details');
+    this.props.navigation.navigate('All');
   };
 
   render() {
@@ -110,7 +110,7 @@ class UpdateMovieScreen extends Component {
         />
         <Button
           title="Update Movie"
-          onPress={() => this.updateMovie}
+          onPress={this.updateMovie}
           style={{ backgroundColor: 'steelblue' }}
         />
       </View>

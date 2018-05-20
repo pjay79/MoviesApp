@@ -16,8 +16,8 @@ export default gql(`
       title
       genre
       director
-      createdAt
       author
+      createdAt
     }
   }
 `);

@@ -7,15 +7,17 @@ export default gql(`
       $genre: String,
       $director: String,
       $author: String!,
+      $createdAt: String!
     ) {
     updateMovie(input: {
-      id: $id, title: $title, genre: $genre, director: $director, author: $author
+      id: $id, title: $title, genre: $genre, director: $director, author: $author, createdAt: $createdAt
     }) {
       id
       title
       genre
       director
       author
+      createdAt
     }
   }
 `);
