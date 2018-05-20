@@ -24,7 +24,9 @@ export default class DetailsScreen extends Component {
       </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableOpacity onPress={() => navigation.navigate('Update')}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Update', { movie: navigation.getParam('movie') })}
+      >
         <FontAwesome name="edit" size={20} color="white" style={{ marginRight: 10 }} />
       </TouchableOpacity>
     ),
@@ -36,7 +38,7 @@ export default class DetailsScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const movie = navigation.getParam('movie', 'NO-ID');
+    const movie = navigation.getParam('movie');
     return (
       <View style={styles.container}>
         <Text>{movie.title}</Text>

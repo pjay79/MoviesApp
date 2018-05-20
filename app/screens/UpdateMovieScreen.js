@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-// import { graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { Auth } from 'aws-amplify';
-// import uuidV4 from 'uuid/v4';
-// import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-// import UpdateMovie from '../graphql/mutations/UpdateMovie';
-// import ListMovies from '../graphql/queries/ListMovies';
+import UpdateMovie from '../graphql/mutations/UpdateMovie';
+import ListMovies from '../graphql/queries/ListMovies';
 
-export default class UpdateMovieScreen extends Component {
+class UpdateMovieScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Update Movie',
     headerStyle: {
@@ -34,6 +32,7 @@ export default class UpdateMovieScreen extends Component {
   });
 
   state = {
+    id: '',
     title: '',
     genre: '',
     director: '',
@@ -42,6 +41,7 @@ export default class UpdateMovieScreen extends Component {
 
   componentDidMount = async () => {
     this.getUser();
+    this.updateState();
   };
 
   onChangeText = (key, value) => {
@@ -56,28 +56,36 @@ export default class UpdateMovieScreen extends Component {
       .catch(err => console.log('error: ', err));
   };
 
-  // updateMovie = () => {
-  //   const {
-  //     title, genre, director, author,
-  //   } = this.state;
-  //   const id = uuidV4();
-  //   const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
-  //   this.props.onUpdate({
-  //     id,
-  //     title,
-  //     genre,
-  //     director,
-  //     author,
-  //     createdAt,
-  //   });
-  //   console.log(`The movie "${title}" has been edited.`);
-  //   console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${author}`);
-  //   this.setState({
-  //     title: '',
-  //     genre: '',
-  //     director: '',
-  //   });
-  // };
+  updateState = () => {
+    const { navigation } = this.props;
+    const movie = navigation.getParam('movie');
+    this.setState({
+      id: movie.id,
+      title: movie.title,
+      genre: movie.genre,
+      director: movie.director,
+    });
+  };
+
+  updateMovie = () => {
+    const {
+      id, title, genre, director, author,
+    } = this.state;
+    this.props.onUpdate({
+      id,
+      title,
+      genre,
+      director,
+      author,
+    });
+    console.log(`The movie "${title}" has been updated.`);
+    this.setState({
+      title: '',
+      genre: '',
+      director: '',
+    });
+    this.props.navigation.navigate('Details');
+  };
 
   render() {
     return (
@@ -100,7 +108,11 @@ export default class UpdateMovieScreen extends Component {
           onChangeText={text => this.onChangeText('director', text)}
           value={this.state.director}
         />
-        <Button title="Update Movie" onPress={() => {}} style={{ backgroundColor: 'steelblue' }} />
+        <Button
+          title="Update Movie"
+          onPress={() => this.updateMovie}
+          style={{ backgroundColor: 'steelblue' }}
+        />
       </View>
     );
   }
@@ -114,31 +126,34 @@ const styles = StyleSheet.create({
   },
 });
 
-// export default graphql(UpdateMovie, {
-//   props: props => ({
-//     onUpdate: movie =>
-//       props.mutate({
-//         variables: movie,
-//         optimisticResponse: {
-//           __typename: 'Mutation',
-//           updateMovie: { ...movie, __typename: 'Movie' },
-//         },
-//       }),
-//   }),
-//   options: {
-//     refetchQueries: [{ query: ListMovies }],
-//     update: (proxy, { data: { updateMovie } }) => {
-//       try {
-//         const data = proxy.readQuery({ query: ListMovies });
-//         data.listMovies.items = [updateMovie];
-//         proxy.writeQuery({ query: ListMovies, data });
-//       } catch (error) {
-//         console.log(error);
-//       }
-//     },
-//   },
-// })(UpdateMovieScreen);
+export default graphql(UpdateMovie, {
+  props: props => ({
+    onUpdate: movie =>
+      props.mutate({
+        variables: movie,
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateMovie: { ...movie, __typename: 'Movie' },
+        },
+      }),
+  }),
+  options: {
+    refetchQueries: [{ query: ListMovies }],
+    update: (proxy, { data: { updateMovie } }) => {
+      try {
+        const data = proxy.readQuery({ query: ListMovies });
+        data.listMovies.items = [updateMovie];
+        proxy.writeQuery({ query: ListMovies, data });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+})(UpdateMovieScreen);
 
 UpdateMovieScreen.propTypes = {
-  // onUpdate: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
