@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ListMovies from '../graphql/queries/ListMovies';
-// import NewMovieSubscription from '../graphql/subscriptions/NewMovieSubscription';
+import DeleteMovie from '../graphql/mutations/DeleteMovie';
 
 class AllMoviesScreen extends Component {
   static navigationOptions = {
@@ -21,7 +21,6 @@ class AllMoviesScreen extends Component {
 
   componentDidMount = async () => {
     this.getUser();
-    // this.props.subscribeToNewMovies();
   };
 
   onPressItem = (item) => {
@@ -36,22 +35,28 @@ class AllMoviesScreen extends Component {
       .catch(err => console.log('error: ', err));
   };
 
+  deleteMovie = (item) => {
+    this.props.onDelete(item);
+  };
+
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => this.onPressItem(item)}>
-      <View key={item.id} style={styles.itemWrapper}>
-        <View>
-          <Text>{item.title}</Text>
-          <Text>{item.genre}</Text>
-          <Text>{item.director}</Text>
-        </View>
-        <View>
-          <Icon name="trash-o" size={14} color="black" style={styles.iconStyle} />
-          <Icon name="edit" size={14} color="black" style={styles.iconStyle} />
-        </View>
+    // <TouchableOpacity onPress={() => this.onPressItem(item)}>
+    <View key={item.id} style={styles.itemWrapper}>
+      <View>
+        <Text>{item.title}</Text>
+        <Text>{item.genre}</Text>
+        <Text>{item.director}</Text>
       </View>
-    </TouchableOpacity>
+      <View>
+        <TouchableOpacity onPress={() => this.deleteMovie(item)}>
+          <Icon name="trash-o" size={16} color="black" style={styles.iconStyle} />
+        </TouchableOpacity>
+        <Icon name="edit" size={14} color="black" style={styles.iconStyle} />
+      </View>
+    </View>
+    // </TouchableOpacity>
   );
 
   renderSeparator = () => <View style={styles.separator} />;
@@ -90,38 +95,42 @@ const styles = StyleSheet.create({
   },
 });
 
-export default graphql(ListMovies, {
-  props: props => ({
-    movies: props.data.listMovies ? props.data.listMovies.items : [],
-    // subscribeToNewMovies: () => {
-    //   try {
-    //     props.data.subscribeToMore({
-    //       document: NewMovieSubscription,
-    //       updateQuery: (prev, { subscriptionData: { data: { onCreateMovie } } }) => ({
-    //         ...prev,
-    //         listMovies: {
-    //           __typename: 'MovieConnection',
-    //           items: [
-    //             onCreateMovie,
-    //             ...prev.listMovies.items.filter(movie => movie.id !== onCreateMovie.id),
-    //           ],
-    //         },
-    //       }),
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+export default compose(
+  graphql(ListMovies, {
+    props: props => ({
+      movies: props.data.listMovies ? props.data.listMovies.items : [],
+    }),
+    options: {
+      fetchPolicy: 'cache-and-network',
+    },
   }),
-  options: {
-    fetchPolicy: 'cache-and-network',
-  },
-})(AllMoviesScreen);
+  graphql(DeleteMovie, {
+    props: props => ({
+      onDelete: movie =>
+        props.mutate({
+          variables: { id: movie.id },
+          optimisticResponse: () => ({ deleteMovie: { ...movie, __typename: 'Movie' } }),
+        }),
+    }),
+    options: {
+      refetchQueries: [{ query: ListMovies }],
+      update: (proxy, { data: { deleteMovie: { id } } }) => {
+        try {
+          const data = proxy.readQuery({ query: ListMovies });
+          data.listMovies.items = data.listMovies.items.filter(movie => movie.id !== id);
+          proxy.writeQuery({ query: ListMovies, data });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
+  }),
+)(AllMoviesScreen);
 
 AllMoviesScreen.propTypes = {
   movies: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
-  // subscribeToNewMovies: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };

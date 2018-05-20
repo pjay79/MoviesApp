@@ -32,7 +32,12 @@ export default class DetailsScreen extends Component {
     return (
       <View style={styles.container}>
         <Text>{movie.title}</Text>
+        <Text>{movie.genre}</Text>
         <Text>{movie.director}</Text>
+        <Text>Added by:</Text>
+        <Text>
+          {movie.author} on {movie.createdAt}
+        </Text>
       </View>
     );
   }
