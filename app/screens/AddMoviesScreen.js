@@ -120,7 +120,7 @@ export default graphql(CreateMovie, {
       }),
   }),
   options: {
-    refetchQueries: [{ query: ListMovies }],
+    // refetchQueries: [{ query: ListMovies }],
     update: (proxy, { data: { createMovie } }) => {
       try {
         const data = proxy.readQuery({ query: ListMovies });

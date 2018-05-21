@@ -138,7 +138,7 @@ export default graphql(UpdateMovie, {
       }),
   }),
   options: {
-    refetchQueries: [{ query: ListMovies }],
+    // refetchQueries: [{ query: ListMovies }],
     update: (proxy, { data: { updateMovie } }) => {
       try {
         const data = proxy.readQuery({ query: ListMovies });

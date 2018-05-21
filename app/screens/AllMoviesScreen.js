@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ListMovies from '../graphql/queries/ListMovies';
 import DeleteMovie from '../graphql/mutations/DeleteMovie';
+import NewMovieSubscription from '../graphql/subscriptions/NewMovieSubscription';
 
 class AllMoviesScreen extends Component {
   static navigationOptions = {
@@ -22,6 +23,7 @@ class AllMoviesScreen extends Component {
 
   componentDidMount = async () => {
     this.getUser();
+    this.props.subscribeToNewMovies();
   };
 
   onPressItem = (item) => {
@@ -102,6 +104,21 @@ export default compose(
   graphql(ListMovies, {
     props: props => ({
       movies: props.data.listMovies ? props.data.listMovies.items : [],
+      subscribeToNewMovies: () => {
+        props.data.subscribeToMore({
+          document: NewMovieSubscription,
+          updateQuery: (prev, { subscriptionData: { data: { onCreateMovie } } }) => ({
+            ...prev,
+            listMovies: {
+              items: [
+                onCreateMovie,
+                ...prev.listMovies.items.filter(movie => movie.id !== onCreateMovie.id),
+              ],
+              __typename: 'MovieConnection',
+            },
+          }),
+        });
+      },
     }),
     options: {
       fetchPolicy: 'cache-and-network',
@@ -116,7 +133,7 @@ export default compose(
         }),
     }),
     options: {
-      refetchQueries: [{ query: ListMovies }],
+      // refetchQueries: [{ query: ListMovies }],
       update: (proxy, { data: { deleteMovie: { id } } }) => {
         try {
           const data = proxy.readQuery({ query: ListMovies });
@@ -136,4 +153,5 @@ AllMoviesScreen.propTypes = {
     navigate: PropTypes.func.isRequired,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
+  subscribeToNewMovies: PropTypes.func.isRequired,
 };
