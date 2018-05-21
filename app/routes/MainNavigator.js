@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {
   createStackNavigator,
   createBottomTabNavigator,
   createSwitchNavigator,
 } from 'react-navigation';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+
+// Screens
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
@@ -17,16 +19,16 @@ import UpdateMovieScreen from '../screens/UpdateMovieScreen';
 import AddMoviesScreen from '../screens/AddMoviesScreen';
 import MoreScreen from '../screens/MoreScreen';
 
+// Tab bar icons
 const AllMoviesIcon = ({ tintColor }) => (
   <MaterialCommunityIcons name="book-multiple" size={20} color={tintColor} />
 );
-
 const AddMoviesIcon = ({ tintColor }) => (
   <MaterialCommunityIcons name="book-plus" size={20} color={tintColor} />
 );
-
 const MoreIcon = ({ tintColor }) => <SimpleLineIcons name="options" size={20} color={tintColor} />;
 
+// Navigators
 const AllMoviesStack = createStackNavigator(
   {
     All: {

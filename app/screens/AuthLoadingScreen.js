@@ -13,7 +13,7 @@ class AuthLoadingScreen extends Component {
   }
 
   checkUser = async () => {
-    Auth.currentAuthenticatedUser()
+    await Auth.currentAuthenticatedUser()
       .then((user) => {
         this.props.navigation.navigate(user ? 'App' : 'Auth');
         console.log('Cognito: ', user);

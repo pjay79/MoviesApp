@@ -30,16 +30,16 @@ class AddMoviesScreen extends Component {
     author: '',
   };
 
-  componentDidMount = async () => {
+  componentDidMount() {
     this.getUser();
-  };
+  }
 
   onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
 
   getUser = async () => {
-    Auth.currentUserInfo()
+    await Auth.currentUserInfo()
       .then((data) => {
         this.setState({ author: data.username });
       })

@@ -22,7 +22,6 @@ export default class SignUpScreen extends Component {
     phone_number: '',
     password: '',
     authCode: '',
-    // user: {},
   };
 
   onChangeText = (key, value) => {

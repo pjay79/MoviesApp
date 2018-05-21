@@ -21,17 +21,17 @@ class AllMoviesScreen extends Component {
     headerLeft: null,
   };
 
-  componentDidMount = async () => {
+  componentDidMount() {
     this.getUser();
     this.props.subscribeToNewMovies();
-  };
+  }
 
   onPressItem = (item) => {
     this.props.navigation.navigate('Details', { movie: item });
   };
 
   getUser = async () => {
-    Auth.currentUserInfo()
+    await Auth.currentUserInfo()
       .then((data) => {
         console.log('Logged in User details: ', data);
       })
