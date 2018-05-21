@@ -10,6 +10,13 @@ export default gql(`
         director
         author
         createdAt
+        reviews {
+          id
+          rating
+          content
+          author
+          createdAt
+        }
       }
     }
   }`);

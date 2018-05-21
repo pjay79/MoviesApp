@@ -2,19 +2,22 @@ import gql from 'graphql-tag';
 
 export default gql(`
   mutation createReview(
-      $movieID: String!
-      $content: String!,
+      $id: ID!,
+      $movieID: ID!,
       $rating: Int!,
+      $content: String!,
+      $author: String!,
+      $createdAt: String!
     ) {
     createReview(input: {
-      movieID: $movieID, content: $content, rating: $rating
+      id: $id, movieID: $movieID, rating: $rating, content: $content, author: $author, createdAt: $createdAt
     }) {
       id
       movieID
-      content
       rating
-      createdAt
+      content
       author
+      createdAt
     }
   }
 `);

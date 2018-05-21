@@ -24,6 +24,7 @@ class AllMoviesScreen extends Component {
   componentDidMount() {
     this.getUser();
     this.props.subscribeToNewMovies();
+    console.log(this.props.movies);
   }
 
   onPressItem = (item) => {
