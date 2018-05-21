@@ -28,7 +28,6 @@ const AddMoviesIcon = ({ tintColor }) => (
 );
 const MoreIcon = ({ tintColor }) => <SimpleLineIcons name="options" size={20} color={tintColor} />;
 
-// Navigators
 const AllMoviesStack = createStackNavigator(
   {
     All: {

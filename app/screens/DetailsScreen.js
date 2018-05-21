@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Modal from 'react-native-modal';
+import Button from '../components/Button';
 
 export default class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -36,6 +38,12 @@ export default class DetailsScreen extends Component {
     ),
   });
 
+  state = {
+    isModalVisible: false,
+  };
+
+  toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
+
   render() {
     const { navigation } = this.props;
     const movie = navigation.getParam('movie');
@@ -48,6 +56,27 @@ export default class DetailsScreen extends Component {
         <Text>
           {movie.author} on {movie.createdAt}
         </Text>
+
+        <Button
+          title="Add Review"
+          onPress={this.toggleModal}
+          style={{ backgroundColor: 'steelblue' }}
+        />
+
+        <Modal
+          isVisible={this.state.isModalVisible}
+          onSwipe={() => this.setState({ isModalVisible: false })}
+          swipeDirection="down"
+        >
+          <View style={styles.modalContent}>
+            <Text>Add Review for {movie.title}</Text>
+            <Button
+              title="Close"
+              onPress={this.toggleModal}
+              style={{ backgroundColor: 'steelblue' }}
+            />
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -58,6 +87,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E9E9EF',
+    borderColor: 'steelblue',
+    borderWidth: 5,
   },
 });
 
