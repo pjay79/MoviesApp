@@ -56,7 +56,7 @@ export default class DetailsScreen extends Component {
     const movie = navigation.getParam('movie');
     return (
       <View style={styles.container}>
-        <View>
+        <View style={styles.movieDetails}>
           <Text>{movie.title}</Text>
           <Text>{movie.genre}</Text>
           <Text>{movie.director}</Text>
@@ -64,8 +64,7 @@ export default class DetailsScreen extends Component {
             Added by {movie.author} on {movie.createdAt}
           </Text>
         </View>
-        <View>
-          <Text>Reviews:</Text>
+        <View style={styles.movieReviews}>
           {movie.reviews.map(review => (
             <View>
               <Text>{review.rating}</Text>
@@ -86,28 +85,35 @@ export default class DetailsScreen extends Component {
         >
           <View style={styles.modalContent}>
             <Text style={styles.title}>{movie.title}</Text>
-            <Text>Rating:</Text>
-            <Input
-              placeholder="Enter a rating between 1 to 10"
-              onChangeText={text => this.onChangeText('rating', text)}
-              value={this.state.rating}
-            />
-            <Text>Review:</Text>
-            <Input
-              placeholder="What say you?"
-              onChangeText={text => this.onChangeText('content', text)}
-              value={this.state.content}
-            />
-            <Button
-              title="Add Review"
-              onPress={() => {}}
-              style={{ backgroundColor: 'steelblue' }}
-            />
-            <Button
-              title="Close"
-              onPress={this.toggleModal}
-              style={{ backgroundColor: 'steelblue' }}
-            />
+            <Text style={styles.subtitle}>Directed by {movie.director}</Text>
+            <View>
+              <Text>Rating:</Text>
+              <Input
+                placeholder="Enter a rating between 1 to 10"
+                onChangeText={text => this.onChangeText('rating', text)}
+                value={this.state.rating}
+              />
+            </View>
+            <View>
+              <Text>Review:</Text>
+              <Input
+                placeholder="What say you?"
+                onChangeText={text => this.onChangeText('content', text)}
+                value={this.state.content}
+              />
+            </View>
+            <View>
+              <Button
+                title="Add Review"
+                onPress={() => {}}
+                style={{ backgroundColor: 'steelblue' }}
+              />
+              <Button
+                title="Close"
+                onPress={this.toggleModal}
+                style={{ backgroundColor: 'steelblue' }}
+              />
+            </View>
           </View>
         </Modal>
       </View>
@@ -124,11 +130,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 18,
+  },
+  movieDetails: {
+    alignItems: 'center',
+  },
+  movieReviews: {
+    alignItems: 'center',
   },
   modalContent: {
-    flex: 1,
-    justifyContent: 'center',
+    height: '75%',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#E9E9EF',
     borderColor: 'steelblue',

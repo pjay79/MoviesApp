@@ -1,4 +1,5 @@
 import React from 'react';
+// import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   createStackNavigator,
@@ -92,6 +93,7 @@ const MoviesTabs = createBottomTabNavigator(
     tabBarOptions: {
       activeTintColor: 'pink',
       inactiveTintColor: 'white',
+      showIcon: true,
       style: {
         backgroundColor: 'steelblue',
       },
