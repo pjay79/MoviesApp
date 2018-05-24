@@ -115,7 +115,10 @@ export default graphql(CreateMovie, {
         variables: movie,
         optimisticResponse: {
           __typename: 'Mutation',
-          createMovie: { ...movie, __typename: 'Movie' },
+          createMovie: {
+            ...movie,
+            __typename: 'Movie',
+          },
         },
       }),
   }),
