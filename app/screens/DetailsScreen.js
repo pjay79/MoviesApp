@@ -64,7 +64,7 @@ export default class DetailsScreen extends Component {
             Added by {movie.author} on {movie.createdAt}
           </Text>
         </View>
-        {/* <View style={styles.movieReviews}>
+        <View style={styles.movieReviews}>
           {movie.reviews.map(review => (
             <View>
               <Text>{review.rating}</Text>
@@ -73,7 +73,7 @@ export default class DetailsScreen extends Component {
               <Text>{review.createdAt}</Text>
             </View>
           ))}
-        </View> */}
+        </View>
         <Button
           title="Add Review"
           onPress={this.toggleModal}

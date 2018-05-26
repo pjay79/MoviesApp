@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
 import PropTypes from 'prop-types';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { graphql } from 'react-apollo';
 import { Auth } from 'aws-amplify';
+import { graphql } from 'react-apollo';
 import moment from 'moment';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
@@ -127,18 +127,7 @@ const styles = StyleSheet.create({
 });
 
 export default graphql(UpdateMovie, {
-  props: props => ({
-    onUpdate: movie =>
-      props.mutate({
-        variables: movie,
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateMovie: { ...movie, __typename: 'Movie' },
-        },
-      }),
-  }),
   options: {
-    // refetchQueries: [{ query: ListMovies }],
     update: (proxy, { data: { updateMovie } }) => {
       try {
         const data = proxy.readQuery({ query: ListMovies });
@@ -152,6 +141,15 @@ export default graphql(UpdateMovie, {
       }
     },
   },
+  props: props => ({
+    onUpdate: movie =>
+      props.mutate({
+        variables: movie,
+        optimisticResponse: () => ({
+          updateMovie: { ...movie, __typename: 'Movie' },
+        }),
+      }),
+  }),
 })(UpdateMovieScreen);
 
 UpdateMovieScreen.propTypes = {

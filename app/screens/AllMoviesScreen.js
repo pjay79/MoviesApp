@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import ListMovies from '../graphql/queries/ListMovies';
 import DeleteMovie from '../graphql/mutations/DeleteMovie';
 import NewMovieSubscription from '../graphql/subscriptions/NewMovieSubscription';
@@ -103,6 +104,9 @@ const styles = StyleSheet.create({
 
 export default compose(
   graphql(ListMovies, {
+    options: {
+      fetchPolicy: 'cache-and-network',
+    },
     props: props => ({
       movies: props.data.listMovies ? props.data.listMovies.items : [],
       subscribeToNewMovies: () => {
@@ -121,20 +125,9 @@ export default compose(
         });
       },
     }),
-    options: {
-      fetchPolicy: 'cache-and-network',
-    },
   }),
   graphql(DeleteMovie, {
-    props: props => ({
-      onDelete: movie =>
-        props.mutate({
-          variables: { id: movie.id },
-          optimisticResponse: () => ({ deleteMovie: { ...movie, __typename: 'Movie' } }),
-        }),
-    }),
     options: {
-      // refetchQueries: [{ query: ListMovies }],
       update: (proxy, { data: { deleteMovie: { id } } }) => {
         try {
           const data = proxy.readQuery({ query: ListMovies });
@@ -145,6 +138,13 @@ export default compose(
         }
       },
     },
+    props: props => ({
+      onDelete: movie =>
+        props.mutate({
+          variables: { id: movie.id },
+          optimisticResponse: () => ({ deleteMovie: { ...movie, __typename: 'Movie' } }),
+        }),
+    }),
   }),
 )(AllMoviesScreen);
 

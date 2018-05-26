@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 import { Auth } from 'aws-amplify';
+import { graphql } from 'react-apollo';
 import uuidV4 from 'uuid/v4';
 import moment from 'moment';
 import Button from '../components/Button';
@@ -110,33 +110,32 @@ const styles = StyleSheet.create({
 
 export default graphql(CreateMovie, {
   props: props => ({
+    options: {
+      update: (proxy, { data: { createMovie } }) => {
+        try {
+          const data = proxy.readQuery({ query: ListMovies });
+          data.listMovies.items = [
+            ...data.listMovies.items.filter(movie => movie.id !== createMovie.id),
+            createMovie,
+          ];
+          proxy.writeQuery({ query: ListMovies, data });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
     onAdd: movie =>
       props.mutate({
         variables: movie,
-        optimisticResponse: {
-          __typename: 'Mutation',
+        optimisticResponse: () => ({
           createMovie: {
             ...movie,
             __typename: 'Movie',
+            reviews: { items: [], __typename: 'ReviewConnection' },
           },
-        },
+        }),
       }),
   }),
-  options: {
-    // refetchQueries: [{ query: ListMovies }],
-    update: (proxy, { data: { createMovie } }) => {
-      try {
-        const data = proxy.readQuery({ query: ListMovies });
-        data.listMovies.items = [
-          ...data.listMovies.items.filter(movie => movie.id !== createMovie.id),
-          createMovie,
-        ];
-        proxy.writeQuery({ query: ListMovies, data });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
 })(AddMoviesScreen);
 
 AddMoviesScreen.propTypes = {

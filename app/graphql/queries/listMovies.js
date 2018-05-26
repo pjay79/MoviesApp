@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export default gql(`
   query listMovies{
-    listMovies {
+    listMovies{
       items {
         id
         title
@@ -10,6 +10,13 @@ export default gql(`
         director
         author
         createdAt
+        reviews {
+          id
+          rating
+          content
+          author
+          createdAt
+        }
       }
     }
   }`);
