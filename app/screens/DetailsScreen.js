@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import { Platform, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { graphql } from 'react-apollo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
+import uuidV4 from 'uuid/v4';
+import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-export default class DetailsScreen extends Component {
+import CreateReview from '../graphql/mutations/CreateReview';
+import ListMovies from '../graphql/queries/ListMovies';
+
+class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.getParam('movie').title,
     headerStyle: {
@@ -50,6 +56,26 @@ export default class DetailsScreen extends Component {
   };
 
   toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
+
+  addReview = () => {
+    const { rating, content } = this.state;
+    const movie = this.props.navigation.getParam('movie');
+    const id = uuidV4();
+    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
+    this.props.onAddReview({
+      id,
+      movieID: movie.id,
+      rating,
+      content,
+      author: movie.author,
+      createdAt,
+    });
+    this.setState({
+      rating: '',
+      content: '',
+    });
+    this.toggleModal();
+  };
 
   render() {
     const { navigation } = this.props;
@@ -106,7 +132,7 @@ export default class DetailsScreen extends Component {
             <View>
               <Button
                 title="Add Review"
-                onPress={() => {}}
+                onPress={this.addReview}
                 style={{ backgroundColor: 'steelblue' }}
               />
               <Button
@@ -151,8 +177,36 @@ const styles = StyleSheet.create({
   },
 });
 
+export default graphql(CreateReview, {
+  options: {
+    update: (proxy, { data: { createReview } }) => {
+      try {
+        const data = proxy.readQuery({ query: ListMovies });
+        data.listMovies.items = [
+          ...data.listMovies.items.filter(movie => movie.id !== createReview.movieID),
+          createReview,
+        ];
+        proxy.writeQuery({ query: ListMovies, data });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  props: props => ({
+    onAddReview: review =>
+      props.mutate({
+        variables: review,
+        optimisticResponse: () => ({
+          createReview: { ...review, __typename: 'Review' },
+        }),
+      }),
+  }),
+})(DetailsScreen);
+
 DetailsScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
+    getParam: PropTypes.func.isRequired,
   }).isRequired,
+  onAddReview: PropTypes.func.isRequired,
 };
