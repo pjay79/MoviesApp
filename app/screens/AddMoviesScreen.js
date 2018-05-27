@@ -127,11 +127,12 @@ export default graphql(CreateMovie, {
     onAdd: movie =>
       props.mutate({
         variables: movie,
+        refetchQueries: [{ query: ListMovies }],
         optimisticResponse: () => ({
           createMovie: {
             ...movie,
             __typename: 'Movie',
-            reviews: { items: [], __typename: 'ReviewConnection' },
+            reviews: { __typename: 'ReviewConnection', items: [] },
           },
         }),
       }),

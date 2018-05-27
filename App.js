@@ -4,11 +4,9 @@ import AWSAppSyncClient from 'aws-appsync';
 import { Rehydrated } from 'aws-appsync-react';
 import { AUTH_TYPE } from 'aws-appsync/lib/link/auth-link';
 import { ApolloProvider } from 'react-apollo';
-
-import MainNavigator from './app/routes/MainNavigator';
-
 import awsConfig from './app/aws-exports';
 import appSyncConfig from './app/config/AppSync';
+import MainNavigator from './app/routes/MainNavigator';
 
 Amplify.configure(awsConfig);
 
