@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
 import PropTypes from 'prop-types';
-import { Auth } from 'aws-amplify';
+// import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -38,43 +38,36 @@ class UpdateMovieScreen extends Component {
     genre: '',
     director: '',
     author: '',
-    createdAt: '',
   };
 
   componentDidMount() {
-    this.getUser();
-    this.updateState();
+    this.getMovieDetails();
   }
 
   onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
 
-  getUser = async () => {
-    await Auth.currentUserInfo()
-      .then((data) => {
-        this.setState({ author: data.username });
-      })
-      .catch(err => console.log('error: ', err));
-  };
-
-  updateState = () => {
+  getMovieDetails = () => {
     const { navigation } = this.props;
     const movie = navigation.getParam('movie');
-    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
+    const {
+      id, title, genre, director, author,
+    } = movie;
     this.setState({
-      id: movie.id,
-      title: movie.title,
-      genre: movie.genre,
-      director: movie.director,
-      createdAt,
+      id,
+      title,
+      genre,
+      director,
+      author,
     });
   };
 
   updateMovie = () => {
     const {
-      id, title, genre, director, author, createdAt,
+      id, title, genre, director, author,
     } = this.state;
+    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     this.props.onUpdate({
       id,
       title,

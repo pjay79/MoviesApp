@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Platform, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { Auth } from 'aws-amplify';
+import { graphql, compose } from 'react-apollo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -13,6 +14,7 @@ import Input from '../components/Input';
 
 import CreateReview from '../graphql/mutations/CreateReview';
 import ListMovies from '../graphql/queries/ListMovies';
+import GetMovie from '../graphql/queries/GetMovie';
 
 class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -47,27 +49,61 @@ class DetailsScreen extends Component {
 
   state = {
     isModalVisible: false,
+    user: '',
+    movieID: '',
+    title: '',
+    genre: '',
+    author: '',
+    createdAt: '',
     rating: '',
     content: '',
   };
 
+  componentDidMount() {
+    this.getUser();
+    this.getMovieDetails();
+  }
+
   onChangeText = (key, value) => {
     this.setState({ [key]: value });
+  };
+
+  getUser = async () => {
+    await Auth.currentUserInfo()
+      .then((data) => {
+        this.setState({ user: data.username });
+      })
+      .catch(err => console.log('error: ', err));
+  };
+
+  getMovieDetails = () => {
+    const movie = this.props.navigation.getParam('movie');
+    const movieID = movie.id;
+    const {
+      title, genre, director, author, createdAt,
+    } = movie;
+    this.setState({
+      movieID,
+      title,
+      genre,
+      director,
+      author,
+      createdAt,
+    });
   };
 
   toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
 
   addReview = () => {
     const { rating, content } = this.state;
-    const movie = this.props.navigation.getParam('movie');
     const id = uuidV4();
     const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     this.props.onAddReview({
       id,
-      movieID: movie.id,
+      movieID: this.state.movieID,
       rating,
       content,
-      author: movie.author,
+      author: this.state.user,
       createdAt,
     });
     this.setState({
@@ -78,27 +114,29 @@ class DetailsScreen extends Component {
   };
 
   render() {
-    const { navigation } = this.props;
-    const movie = navigation.getParam('movie');
+    const {
+      title, genre, director, author, createdAt,
+    } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.movieDetails}>
-          <Text>{movie.title}</Text>
-          <Text>{movie.genre}</Text>
-          <Text>{movie.director}</Text>
+          <Text>{title}</Text>
+          <Text>{genre}</Text>
+          <Text>{director}</Text>
           <Text>
-            Added by {movie.author} on {movie.createdAt}
+            Added by {author} on {createdAt}
           </Text>
         </View>
         <View style={styles.movieReviews}>
-          {movie.reviews.map(review => (
-            <View>
-              <Text>{review.rating}</Text>
-              <Text>{review.content}</Text>
-              <Text>{review.author}</Text>
-              <Text>{review.createdAt}</Text>
-            </View>
-          ))}
+          {this.props.reviews &&
+            this.props.reviews.map(review => (
+              <View key={review.id}>
+                <Text>{review.rating}</Text>
+                <Text>{review.content}</Text>
+                <Text>{review.author}</Text>
+                <Text>{review.createdAt}</Text>
+              </View>
+            ))}
         </View>
         <Button
           title="Add Review"
@@ -111,8 +149,8 @@ class DetailsScreen extends Component {
           swipeDirection="down"
         >
           <View style={styles.modalContent}>
-            <Text style={styles.title}>{movie.title}</Text>
-            <Text style={styles.subtitle}>Directed by {movie.director}</Text>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>Directed by {director}</Text>
             <View>
               <Text>Rating:</Text>
               <Input
@@ -177,31 +215,43 @@ const styles = StyleSheet.create({
   },
 });
 
-export default graphql(CreateReview, {
-  options: {
-    update: (proxy, { data: { createReview } }) => {
-      try {
-        const data = proxy.readQuery({ query: ListMovies });
-        data.listMovies.items = [
-          ...data.listMovies.items.filter(movie => movie.id !== createReview.movieID),
-          createReview,
-        ];
-        proxy.writeQuery({ query: ListMovies, data });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-  props: props => ({
-    onAddReview: review =>
-      props.mutate({
-        variables: review,
-        optimisticResponse: () => ({
-          createReview: { ...review, __typename: 'Review' },
-        }),
-      }),
+export default compose(
+  graphql(GetMovie, {
+    options: props => ({
+      fetchPolicy: 'cache-and-network',
+      variables: { movieID: props.navigation.getParam('movie').id },
+    }),
+    props: props => ({
+      reviews: props.data.getMovie ? props.data.getMovie.reviews : [],
+    }),
   }),
-})(DetailsScreen);
+  graphql(CreateReview, {
+    options: {
+      update: (proxy, { data: { createReview } }) => {
+        try {
+          const data = proxy.readQuery({ query: ListMovies });
+          data.listMovies.items = [
+            ...data.listMovies.items.filter(movie => movie.id !== createReview.movieID),
+            createReview,
+          ];
+          proxy.writeQuery({ query: ListMovies, data });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
+    props: props => ({
+      onAddReview: review =>
+        props.mutate({
+          variables: review,
+          refetchQueries: [{ query: ListMovies }],
+          optimisticResponse: () => ({
+            createReview: { ...review, __typename: 'Review' },
+          }),
+        }),
+    }),
+  }),
+)(DetailsScreen);
 
 DetailsScreen.propTypes = {
   navigation: PropTypes.shape({
@@ -209,4 +259,5 @@ DetailsScreen.propTypes = {
     getParam: PropTypes.func.isRequired,
   }).isRequired,
   onAddReview: PropTypes.func.isRequired,
+  reviews: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 };

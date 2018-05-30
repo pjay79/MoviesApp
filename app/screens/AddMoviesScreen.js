@@ -27,7 +27,7 @@ class AddMoviesScreen extends Component {
     title: '',
     genre: '',
     director: '',
-    author: '',
+    user: '',
   };
 
   componentDidMount() {
@@ -41,27 +41,27 @@ class AddMoviesScreen extends Component {
   getUser = async () => {
     await Auth.currentUserInfo()
       .then((data) => {
-        this.setState({ author: data.username });
+        this.setState({ user: data.username });
       })
       .catch(err => console.log('error: ', err));
   };
 
   addMovie = () => {
     const {
-      title, genre, director, author,
+      title, genre, director, user,
     } = this.state;
     const id = uuidV4();
     const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
-    this.props.onAdd({
+    this.props.onAddMovie({
       id,
       title,
       genre,
       director,
-      author,
+      author: user,
       createdAt,
     });
     console.log(`The movie "${title}" has been added.`);
-    console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${author}`);
+    console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${user}`);
     this.setState({
       title: '',
       genre: '',
@@ -124,7 +124,7 @@ export default graphql(CreateMovie, {
         }
       },
     },
-    onAdd: movie =>
+    onAddMovie: movie =>
       props.mutate({
         variables: movie,
         refetchQueries: [{ query: ListMovies }],
@@ -140,5 +140,5 @@ export default graphql(CreateMovie, {
 })(AddMoviesScreen);
 
 AddMoviesScreen.propTypes = {
-  onAdd: PropTypes.func.isRequired,
+  onAddMovie: PropTypes.func.isRequired,
 };

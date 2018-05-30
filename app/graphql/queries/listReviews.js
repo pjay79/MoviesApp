@@ -1,15 +1,15 @@
 import gql from 'graphql-tag';
 
 export default gql(`
-  query listReviews($movieID: ID!) {
-    listReviews(id: $movieID) {
+  query listReviews($id: ID!) {
+    listReviews(movieID: $id) {
       items {
          id
          movieID
          rating
          content
-         createdAt
          author
+         createdAt
        }
      }
    }`);
