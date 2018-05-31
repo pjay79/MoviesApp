@@ -14,6 +14,7 @@ import Input from '../components/Input';
 
 import CreateReview from '../graphql/mutations/CreateReview';
 import ListReviews from '../graphql/queries/ListReviews';
+import NewReviewSubscription from '../graphql/subscriptions/NewMovieSubscription';
 
 class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -61,6 +62,8 @@ class DetailsScreen extends Component {
   componentDidMount() {
     this.getUser();
     this.getMovieDetails();
+    this.props.subscribeToNewReviews();
+    console.log(this.props.reviews);
   }
 
   onChangeText = (key, value) => {
@@ -222,6 +225,21 @@ export default compose(
     }),
     props: props => ({
       reviews: props.data.listReviews ? props.data.listReviews.items : [],
+      subscribeToNewReviews: () => {
+        props.data.subscribeToMore({
+          document: NewReviewSubscription,
+          updateQuery: (prev, { subscriptionData: { data: { onCreateReview } } }) => ({
+            ...prev,
+            listReviews: {
+              items: [
+                onCreateReview,
+                ...prev.listReviews.items.filter(review => review.id !== onCreateReview.id),
+              ],
+              __typename: 'ReviewConnection',
+            },
+          }),
+        });
+      },
     }),
   }),
   graphql(CreateReview, {
@@ -250,7 +268,6 @@ export default compose(
       onAddReview: review =>
         props.mutate({
           variables: review,
-          refetchQueries: [{ query: ListReviews, variables: { movieID: review.movieID } }],
           optimisticResponse: () => ({
             createReview: { ...review, __typename: 'Review' },
           }),
@@ -260,10 +277,11 @@ export default compose(
 )(DetailsScreen);
 
 DetailsScreen.propTypes = {
+  reviews: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
     getParam: PropTypes.func.isRequired,
   }).isRequired,
   onAddReview: PropTypes.func.isRequired,
-  reviews: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  subscribeToNewReviews: PropTypes.func.isRequired,
 };
