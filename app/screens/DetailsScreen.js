@@ -13,8 +13,9 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 
 import CreateReview from '../graphql/mutations/CreateReview';
-import ListMovies from '../graphql/queries/ListMovies';
-import GetMovie from '../graphql/queries/GetMovie';
+import ListReviews from '../graphql/queries/ListReviews';
+// import ListMovies from '../graphql/queries/ListMovies';
+// import GetMovie from '../graphql/queries/GetMovie';
 
 class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -216,25 +217,32 @@ const styles = StyleSheet.create({
 });
 
 export default compose(
-  graphql(GetMovie, {
+  graphql(ListReviews, {
     options: props => ({
       fetchPolicy: 'cache-and-network',
       variables: { movieID: props.navigation.getParam('movie').id },
     }),
     props: props => ({
-      reviews: props.data.getMovie ? props.data.getMovie.reviews : [],
+      reviews: props.data.listReviews ? props.data.listReviews.items : [],
     }),
   }),
   graphql(CreateReview, {
     options: {
       update: (proxy, { data: { createReview } }) => {
         try {
-          const data = proxy.readQuery({ query: ListMovies });
-          data.listMovies.items = [
-            ...data.listMovies.items.filter(movie => movie.id !== createReview.movieID),
+          const data = proxy.readQuery({
+            query: ListReviews,
+            variables: { movieID: createReview.movieID },
+          });
+          data.listReviews.items = [
+            ...data.listReviews.items.filter(review => review.id !== createReview.id),
             createReview,
           ];
-          proxy.writeQuery({ query: ListMovies, data });
+          proxy.writeQuery({
+            query: ListReviews,
+            data,
+            variables: { movieID: createReview.movieID },
+          });
         } catch (error) {
           console.log(error);
         }
@@ -244,7 +252,7 @@ export default compose(
       onAddReview: review =>
         props.mutate({
           variables: review,
-          refetchQueries: [{ query: ListMovies }],
+          refetchQueries: [{ query: ListReviews, variables: { movieID: review.movieID } }],
           optimisticResponse: () => ({
             createReview: { ...review, __typename: 'Review' },
           }),

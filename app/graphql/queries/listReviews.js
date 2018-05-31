@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export default gql(`
-  query listReviews($id: ID!) {
-    listReviews(movieID: $id) {
+  query listReviews($movieID: ID!) {
+    listReviews(movieID: $movieID) {
       items {
          id
          movieID
