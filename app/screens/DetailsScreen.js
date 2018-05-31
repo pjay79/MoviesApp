@@ -14,8 +14,6 @@ import Input from '../components/Input';
 
 import CreateReview from '../graphql/mutations/CreateReview';
 import ListReviews from '../graphql/queries/ListReviews';
-// import ListMovies from '../graphql/queries/ListMovies';
-// import GetMovie from '../graphql/queries/GetMovie';
 
 class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({

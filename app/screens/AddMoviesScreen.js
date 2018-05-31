@@ -127,7 +127,6 @@ export default graphql(CreateMovie, {
     onAddMovie: movie =>
       props.mutate({
         variables: movie,
-        refetchQueries: [{ query: ListMovies }],
         optimisticResponse: () => ({
           createMovie: {
             ...movie,

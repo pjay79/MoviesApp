@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
 import PropTypes from 'prop-types';
-// import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
