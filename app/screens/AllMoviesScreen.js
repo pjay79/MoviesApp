@@ -24,10 +24,15 @@ class AllMoviesScreen extends Component {
     headerLeft: null,
   };
 
+  state = {
+    query: '',
+    movies: [],
+  };
+
   componentDidMount() {
     this.getUser();
+    this.getAllMovies();
     this.props.subscribeToNewMovies();
-    console.log(this.props.movies);
   }
 
   onPressItem = (item) => {
@@ -42,8 +47,27 @@ class AllMoviesScreen extends Component {
       .catch(err => console.log('error: ', err));
   };
 
+  getAllMovies = () => {
+    this.setState({ movies: this.props.movies });
+  };
+
   deleteMovie = (item) => {
     this.props.onDelete(item);
+  };
+
+  addQuery = (query) => {
+    this.setState({ query });
+    this.movieQuery();
+  };
+
+  clearQuery = () => {
+    this.setState({ query: '' });
+    this.getAllMovies();
+  };
+
+  movieQuery = () => {
+    const results = this.state.movies.filter(movie => movie.title.includes(this.state.query));
+    this.setState({ movies: results });
   };
 
   keyExtractor = item => item.id;
@@ -72,15 +96,19 @@ class AllMoviesScreen extends Component {
 
   renderHeader = () => (
     <SearchBar
-      placeholder="Search movies"
       lightTheme
+      clearIcon
+      placeholder="Search movies"
       containerStyle={{ backgroundColor: 'transparent' }}
       inputStyle={{ backgroundColor: '#E9E9EF' }}
+      onChangeText={this.addQuery}
+      onClearText={this.clearQuery}
+      value={this.state.query}
     />
   );
 
   render() {
-    const { movies } = this.props;
+    const { movies } = this.state;
     const data = _.orderBy(movies, ['title'], ['asc']);
     return (
       <View style={styles.container}>
@@ -90,6 +118,7 @@ class AllMoviesScreen extends Component {
           renderItem={this.renderItem}
           ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
+          keyboardShouldPersistTaps="handled"
         />
       </View>
     );
