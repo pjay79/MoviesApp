@@ -27,6 +27,8 @@ class AllMoviesScreen extends Component {
   state = {
     query: '',
     movies: [],
+    moviesData: [],
+    loading: false,
   };
 
   componentDidMount() {
@@ -48,7 +50,7 @@ class AllMoviesScreen extends Component {
   };
 
   getAllMovies = () => {
-    this.setState({ movies: this.props.movies });
+    this.setState({ movies: this.props.movies, moviesData: this.props.movies });
   };
 
   deleteMovie = (item) => {
@@ -56,8 +58,14 @@ class AllMoviesScreen extends Component {
   };
 
   addQuery = (query) => {
-    this.setState({ query });
-    this.movieQuery();
+    if (!query || query === '') {
+      this.setState({ loading: false });
+      this.setState({ movies: this.props.movies });
+    } else {
+      this.setState({ loading: true });
+      this.setState({ query });
+      this.movieQuery();
+    }
   };
 
   clearQuery = () => {
@@ -66,7 +74,7 @@ class AllMoviesScreen extends Component {
   };
 
   movieQuery = () => {
-    const results = this.state.movies.filter(movie => movie.title.includes(this.state.query));
+    const results = this.state.moviesData.filter(movie => movie.title.includes(this.state.query));
     this.setState({ movies: results });
   };
 
@@ -98,6 +106,7 @@ class AllMoviesScreen extends Component {
     <SearchBar
       lightTheme
       clearIcon
+      showLoadingIcon={this.state.loading}
       placeholder="Search movies"
       containerStyle={{ backgroundColor: 'transparent' }}
       inputStyle={{ backgroundColor: '#E9E9EF' }}
