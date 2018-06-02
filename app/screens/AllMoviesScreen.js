@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { SearchBar } from 'react-native-elements';
 import _ from 'lodash';
 
 import ListMovies from '../graphql/queries/ListMovies';
@@ -69,6 +70,15 @@ class AllMoviesScreen extends Component {
 
   renderSeparator = () => <View style={styles.separator} />;
 
+  renderHeader = () => (
+    <SearchBar
+      placeholder="Search movies"
+      lightTheme
+      containerStyle={{ backgroundColor: 'transparent' }}
+      inputStyle={{ backgroundColor: '#E9E9EF' }}
+    />
+  );
+
   render() {
     const { movies } = this.props;
     const data = _.orderBy(movies, ['title'], ['asc']);
@@ -79,6 +89,7 @@ class AllMoviesScreen extends Component {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ItemSeparatorComponent={this.renderSeparator}
+          ListHeaderComponent={this.renderHeader}
         />
       </View>
     );
@@ -88,7 +99,6 @@ class AllMoviesScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10,
   },
   itemWrapper: {
     flexDirection: 'row',
