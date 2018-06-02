@@ -118,6 +118,7 @@ export default graphql(CreateMovie, {
             ...data.listMovies.items.filter(movie => movie.id !== createMovie.id),
             createMovie,
           ];
+          // data.listMovies.items.unshift(createMovie);
           proxy.writeQuery({ query: ListMovies, data });
         } catch (error) {
           console.log(error);

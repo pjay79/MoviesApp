@@ -5,6 +5,7 @@ import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import _ from 'lodash';
 
 import ListMovies from '../graphql/queries/ListMovies';
 import DeleteMovie from '../graphql/mutations/DeleteMovie';
@@ -69,10 +70,12 @@ class AllMoviesScreen extends Component {
   renderSeparator = () => <View style={styles.separator} />;
 
   render() {
+    const { movies } = this.props;
+    const data = _.orderBy(movies, ['title'], ['asc']);
     return (
       <View style={styles.container}>
         <FlatList
-          data={this.props.movies}
+          data={data}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ItemSeparatorComponent={this.renderSeparator}

@@ -268,6 +268,7 @@ export default compose(
       onAddReview: review =>
         props.mutate({
           variables: review,
+          // refetchQueries: [{ query: ListReviews, variables: { movieID: review.movieID } }],
           optimisticResponse: () => ({
             createReview: { ...review, __typename: 'Review' },
           }),

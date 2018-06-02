@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export default gql(`
   query listMovies{
-    listMovies{
+    listMovies {
       items {
         id
         title
