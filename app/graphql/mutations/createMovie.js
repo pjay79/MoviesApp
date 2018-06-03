@@ -8,9 +8,10 @@ export default gql(`
       $director: String!,
       $author: String!,
       $createdAt: String!
+      $likes: Int!
     ) {
     createMovie(input: {
-      id: $id, title: $title, genre: $genre, director: $director, author: $author, createdAt: $createdAt
+      id: $id, title: $title, genre: $genre, director: $director, author: $author, createdAt: $createdAt, likes: $likes
     }) {
       id
       title
@@ -18,6 +19,7 @@ export default gql(`
       director
       author
       createdAt
+      likes
     }
   }
 `);

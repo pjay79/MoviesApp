@@ -10,6 +10,7 @@ import _ from 'lodash';
 
 import ListMovies from '../graphql/queries/ListMovies';
 import DeleteMovie from '../graphql/mutations/DeleteMovie';
+import UpdateMovie from '../graphql/mutations/UpdateMovie';
 import NewMovieSubscription from '../graphql/subscriptions/NewMovieSubscription';
 
 class AllMoviesScreen extends Component {
@@ -78,6 +79,18 @@ class AllMoviesScreen extends Component {
     this.getAllMovies();
   };
 
+  updateMovie = (item) => {
+    this.props.onUpdate({
+      id: item.id,
+      title: item.title,
+      genre: item.genre,
+      director: item.director,
+      author: item.author,
+      createdAt: item.createdAt,
+      likes: item.likes + 1,
+    });
+  };
+
   keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
@@ -93,9 +106,10 @@ class AllMoviesScreen extends Component {
         <TouchableOpacity onPress={() => this.deleteMovie(item)}>
           <FontAwesome name="trash-o" size={16} color="black" style={styles.iconStyle} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('Favourite added!')}>
+        <TouchableOpacity onPress={() => this.updateMovie(item)}>
           <MaterialIcons name="favorite" size={14} color="black" style={styles.iconStyle} />
         </TouchableOpacity>
+        <Text>Likes: {item.likes}</Text>
       </View>
     </View>
   );
@@ -213,6 +227,31 @@ export default compose(
         }),
     }),
   }),
+  graphql(UpdateMovie, {
+    options: {
+      update: (proxy, { data: { updateMovie } }) => {
+        try {
+          const data = proxy.readQuery({ query: ListMovies });
+          data.listMovies.items = [
+            ...data.listMovies.items.filter(movie => movie.id !== updateMovie.id),
+            updateMovie,
+          ];
+          proxy.writeQuery({ query: ListMovies, data });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    },
+    props: props => ({
+      onUpdate: movie =>
+        props.mutate({
+          variables: movie,
+          optimisticResponse: () => ({
+            updateMovie: { ...movie, __typename: 'Movie' },
+          }),
+        }),
+    }),
+  }),
 )(AllMoviesScreen);
 
 AllMoviesScreen.propTypes = {
@@ -221,5 +260,6 @@ AllMoviesScreen.propTypes = {
     navigate: PropTypes.func.isRequired,
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   subscribeToNewMovies: PropTypes.func.isRequired,
 };

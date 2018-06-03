@@ -10,6 +10,7 @@ export default gql(`
         director
         author
         createdAt
+        likes
       }
     }
   }`);
