@@ -68,14 +68,14 @@ class AllMoviesScreen extends Component {
     }
   };
 
-  clearQuery = () => {
-    this.setState({ query: '' });
-    this.getAllMovies();
-  };
-
   movieQuery = () => {
     const results = this.state.moviesData.filter(movie => movie.title.includes(this.state.query));
     this.setState({ movies: results });
+  };
+
+  clearQuery = () => {
+    this.setState({ query: '' });
+    this.getAllMovies();
   };
 
   keyExtractor = item => item.id;
@@ -117,6 +117,22 @@ class AllMoviesScreen extends Component {
   );
 
   render() {
+    if (!this.state.query || this.state.query === '') {
+      const { movies } = this.props;
+      const data = _.orderBy(movies, ['title'], ['asc']);
+      return (
+        <View style={styles.container}>
+          <FlatList
+            data={data}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderItem}
+            ItemSeparatorComponent={this.renderSeparator}
+            ListHeaderComponent={this.renderHeader}
+            keyboardShouldPersistTaps="handled"
+          />
+        </View>
+      );
+    }
     const { movies } = this.state;
     const data = _.orderBy(movies, ['title'], ['asc']);
     return (
