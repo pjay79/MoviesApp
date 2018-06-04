@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+import SplashScreen from 'react-native-splash-screen';
 import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -37,6 +38,7 @@ class AllMoviesScreen extends Component {
     this.getUser();
     this.getAllMovies();
     this.props.subscribeToNewMovies();
+    SplashScreen.hide();
   }
 
   onPressItem = (item) => {

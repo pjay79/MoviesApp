@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import SplashScreen from 'react-native-splash-screen';
 import { Auth } from 'aws-amplify';
 
 class AuthLoadingScreen extends Component {
@@ -11,7 +10,6 @@ class AuthLoadingScreen extends Component {
 
   componentDidMount() {
     this.checkUser();
-    SplashScreen.hide();
   }
 
   checkUser = async () => {
