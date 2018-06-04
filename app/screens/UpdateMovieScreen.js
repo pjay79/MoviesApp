@@ -14,7 +14,7 @@ class UpdateMovieScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Update Movie',
     headerStyle: {
-      backgroundColor: 'steelblue',
+      backgroundColor: '#0F303F',
     },
     headerTitleStyle: {
       color: 'white',
@@ -106,7 +106,7 @@ class UpdateMovieScreen extends Component {
         <Button
           title="Update Movie"
           onPress={this.updateMovie}
-          style={{ backgroundColor: 'steelblue' }}
+          style={{ backgroundColor: '#0F303F' }}
         />
       </View>
     );

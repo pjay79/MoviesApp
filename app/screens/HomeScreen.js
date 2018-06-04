@@ -14,12 +14,12 @@ export default class HomeScreen extends Component {
         <Button
           title="SIGN IN"
           onPress={() => this.props.navigation.navigate('SignIn')}
-          style={{ backgroundColor: 'darkgrey' }}
+          style={{ backgroundColor: '#FFC50D' }}
         />
         <Button
           title="SIGN UP"
           onPress={() => this.props.navigation.navigate('SignUp')}
-          style={{ backgroundColor: 'darkgrey' }}
+          style={{ backgroundColor: '#FFC50D' }}
         />
       </View>
     );
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'steelblue',
+    backgroundColor: '#0F303F',
   },
 });
 

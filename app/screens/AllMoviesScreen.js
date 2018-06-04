@@ -17,7 +17,7 @@ class AllMoviesScreen extends Component {
   static navigationOptions = {
     title: 'All Movies',
     headerStyle: {
-      backgroundColor: 'steelblue',
+      backgroundColor: '#0F303F',
     },
     headerTitleStyle: {
       color: 'white',

@@ -91,11 +91,11 @@ const MoviesTabs = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: 'pink',
+      activeTintColor: '#FFC50D',
       inactiveTintColor: 'white',
       showIcon: true,
       style: {
-        backgroundColor: 'steelblue',
+        backgroundColor: '#0F303F',
       },
     },
   },

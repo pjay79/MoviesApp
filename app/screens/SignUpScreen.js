@@ -9,7 +9,7 @@ export default class SignUpScreen extends Component {
   static navigationOptions = {
     title: 'Sign Up',
     headerStyle: {
-      backgroundColor: 'steelblue',
+      backgroundColor: '#0F303F',
       elevation: 0,
       borderBottomWidth: 0,
     },
@@ -81,7 +81,7 @@ export default class SignUpScreen extends Component {
           value={this.state.password}
           secureTextEntry
         />
-        <Button title="Sign Up" onPress={this.signUp} style={{ backgroundColor: 'steelblue' }} />
+        <Button title="Sign Up" onPress={this.signUp} style={{ backgroundColor: '#0F303F' }} />
         <Text>Auth code:</Text>
         <Input
           placeholder="******"
@@ -91,7 +91,7 @@ export default class SignUpScreen extends Component {
         <Button
           title="Confirm Sign Up"
           onPress={this.confirmSignUp}
-          style={{ backgroundColor: 'steelblue' }}
+          style={{ backgroundColor: '#0F303F' }}
         />
       </View>
     );

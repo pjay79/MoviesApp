@@ -20,7 +20,7 @@ class DetailsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: navigation.getParam('movie').title,
     headerStyle: {
-      backgroundColor: 'steelblue',
+      backgroundColor: '#0F303F',
       elevation: 0,
       borderBottomWidth: 0,
     },
@@ -143,7 +143,7 @@ class DetailsScreen extends Component {
         <Button
           title="Add Review"
           onPress={this.toggleModal}
-          style={{ backgroundColor: 'steelblue' }}
+          style={{ backgroundColor: '#0F303F' }}
         />
         <Modal
           isVisible={this.state.isModalVisible}
@@ -173,12 +173,12 @@ class DetailsScreen extends Component {
               <Button
                 title="Add Review"
                 onPress={this.addReview}
-                style={{ backgroundColor: 'steelblue' }}
+                style={{ backgroundColor: '#0F303F' }}
               />
               <Button
                 title="Close"
                 onPress={this.toggleModal}
-                style={{ backgroundColor: 'steelblue' }}
+                style={{ backgroundColor: '#0F303F' }}
               />
             </View>
           </View>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#E9E9EF',
-    borderColor: 'steelblue',
+    borderColor: '#0F303F',
     borderWidth: 5,
   },
 });

@@ -15,7 +15,7 @@ class AddMoviesScreen extends Component {
   static navigationOptions = {
     title: 'Add Movie',
     headerStyle: {
-      backgroundColor: 'steelblue',
+      backgroundColor: '#0F303F',
     },
     headerTitleStyle: {
       color: 'white',
@@ -91,11 +91,7 @@ class AddMoviesScreen extends Component {
           onChangeText={text => this.onChangeText('director', text)}
           value={this.state.director}
         />
-        <Button
-          title="Add Movie"
-          onPress={this.addMovie}
-          style={{ backgroundColor: 'steelblue' }}
-        />
+        <Button title="Add Movie" onPress={this.addMovie} style={{ backgroundColor: '#0F303F' }} />
       </View>
     );
   }

@@ -8,7 +8,7 @@ export default class MoreScreen extends Component {
   static navigationOptions = {
     title: 'More',
     headerStyle: {
-      backgroundColor: 'steelblue',
+      backgroundColor: '#0F303F',
     },
     headerTitleStyle: {
       color: 'white',
@@ -28,7 +28,7 @@ export default class MoreScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button title="Sign Out" onPress={this.signOut} style={{ backgroundColor: 'steelblue' }} />
+        <Button title="Sign Out" onPress={this.signOut} style={{ backgroundColor: '#0F303F' }} />
       </View>
     );
   }
