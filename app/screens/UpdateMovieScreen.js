@@ -37,6 +37,7 @@ class UpdateMovieScreen extends Component {
     genre: '',
     director: '',
     author: '',
+    likes: null,
   };
 
   componentDidMount() {
@@ -51,7 +52,7 @@ class UpdateMovieScreen extends Component {
     const { navigation } = this.props;
     const movie = navigation.getParam('movie');
     const {
-      id, title, genre, director, author,
+      id, title, genre, director, author, likes,
     } = movie;
     this.setState({
       id,
@@ -59,12 +60,13 @@ class UpdateMovieScreen extends Component {
       genre,
       director,
       author,
+      likes,
     });
   };
 
   updateMovie = () => {
     const {
-      id, title, genre, director, author,
+      id, title, genre, director, author, likes,
     } = this.state;
     const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     this.props.onUpdate({
@@ -74,6 +76,7 @@ class UpdateMovieScreen extends Component {
       director,
       author,
       createdAt,
+      likes,
     });
     console.log(`The movie "${title}" has been updated.`);
     this.props.navigation.navigate('All');

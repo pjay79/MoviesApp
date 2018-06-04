@@ -26,6 +26,7 @@ class AllMoviesScreen extends Component {
   };
 
   state = {
+    user: '',
     query: '',
     movies: [],
     moviesData: [],
@@ -45,7 +46,8 @@ class AllMoviesScreen extends Component {
   getUser = async () => {
     await Auth.currentUserInfo()
       .then((data) => {
-        console.log('Logged in User details: ', data);
+        this.setState({ user: data.username });
+        console.log(`Current user: ${this.state.user}`);
       })
       .catch(err => console.log('error: ', err));
   };
@@ -80,14 +82,17 @@ class AllMoviesScreen extends Component {
   };
 
   updateMovie = (item) => {
+    const {
+      id, title, genre, director, author, createdAt, likes,
+    } = item;
     this.props.onUpdate({
-      id: item.id,
-      title: item.title,
-      genre: item.genre,
-      director: item.director,
-      author: item.author,
-      createdAt: item.createdAt,
-      likes: item.likes + 1,
+      id,
+      title,
+      genre,
+      director,
+      author,
+      createdAt,
+      likes: likes + 1,
     });
   };
 
