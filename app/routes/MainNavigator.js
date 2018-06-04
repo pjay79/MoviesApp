@@ -11,6 +11,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 // Screens
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
+import IntroScreen from '../screens/IntroScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
@@ -132,6 +133,7 @@ const AuthStack = createStackNavigator(
 export default createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
+    Intro: IntroScreen,
     App: AppStack,
     Auth: AuthStack,
   },

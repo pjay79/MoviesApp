@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 
@@ -9,8 +9,17 @@ class AuthLoadingScreen extends Component {
   };
 
   componentDidMount() {
-    this.checkUser();
+    this.checkIntro();
   }
+
+  checkIntro = async () => {
+    const value = await AsyncStorage.getItem('@SKIP_INTRO');
+    if (value !== null || value === 'true') {
+      this.checkUser();
+    } else {
+      this.props.navigation.navigate('Intro');
+    }
+  };
 
   checkUser = async () => {
     await Auth.currentAuthenticatedUser()
