@@ -21,6 +21,7 @@
     "react-native": "0.55.3",
     "react-native-elements": "^0.19.1",
     "react-native-modal": "^6.0.0",
+    "react-native-splash-screen": "^3.0.7",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^2.0.1",
     "react-navigation-material-bottom-tabs": "^0.1.2",
