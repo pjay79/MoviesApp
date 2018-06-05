@@ -3,7 +3,7 @@ import { View, ActivityIndicator, StyleSheet, AsyncStorage } from 'react-native'
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 
-class AuthLoadingScreen extends Component {
+class LoadingScreen extends Component {
   static navigationOptions = {
     header: null,
   };
@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
   },
 });
 
-AuthLoadingScreen.propTypes = {
+LoadingScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-export default AuthLoadingScreen;
+export default LoadingScreen;

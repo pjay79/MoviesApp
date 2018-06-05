@@ -10,7 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 // Screens
-import AuthLoadingScreen from '../screens/AuthLoadingScreen';
+import LoadingScreen from '../screens/LoadingScreen';
 import IntroScreen from '../screens/IntroScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
@@ -132,13 +132,13 @@ const AuthStack = createStackNavigator(
 
 export default createSwitchNavigator(
   {
-    AuthLoading: AuthLoadingScreen,
+    Loading: LoadingScreen,
     Intro: IntroScreen,
     App: AppStack,
     Auth: AuthStack,
   },
   {
-    initialRouteName: 'AuthLoading',
+    initialRouteName: 'Loading',
   },
 );
 

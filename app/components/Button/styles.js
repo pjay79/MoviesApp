@@ -12,11 +12,14 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     width: width * 0.8,
+    borderRadius: 8,
   },
   buttonText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
+    fontWeight: 'bold',
+    letterSpacing: 2,
   },
 });
 
