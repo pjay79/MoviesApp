@@ -63,8 +63,8 @@ export default class SignInScreen extends Component {
           value={this.state.password}
           secureTextEntry
         />
-        <Button title="Sign In" onPress={this.signIn} style={{ backgroundColor: '#0F303F' }} />
-        <Text>Confirm Sign In:</Text>
+        <Button title="SIGN IN" onPress={this.signIn} style={{ backgroundColor: '#FFC50D' }} />
+        <Text>Enter SMS passcode here:</Text>
         <Input
           placeholder="******"
           onChangeText={text => this.onChangeText('authCode', text)}
@@ -72,9 +72,9 @@ export default class SignInScreen extends Component {
           secureTextEntry
         />
         <Button
-          title="Sign In"
+          title="CONFIRM SIGN IN"
           onPress={this.confirmSignIn}
-          style={{ backgroundColor: '#0F303F' }}
+          style={{ backgroundColor: '#14B0BF' }}
         />
       </View>
     );
