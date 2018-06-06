@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
@@ -22,17 +22,19 @@ export default class SignUpScreen extends Component {
     phone_number: '',
     password: '',
     authCode: '',
+    loading: false,
   };
 
   onChangeText = (key, value) => {
     this.setState({ [key]: value });
   };
 
-  signUp = () => {
+  signUp = async () => {
+    this.setState({ loading: true });
     const {
       username, password, email, phone_number,
     } = this.state;
-    Auth.signUp({
+    await Auth.signUp({
       username,
       password,
       attributes: {
@@ -42,39 +44,42 @@ export default class SignUpScreen extends Component {
     })
       .then(() => console.log('User sign up success!!'))
       .catch(err => console.log('Error signing up user: ', err));
+    this.setState({ loading: false });
   };
 
-  confirmSignUp = () => {
-    Auth.confirmSignUp(this.state.username, this.state.authCode)
+  confirmSignUp = async () => {
+    this.setState({ loading: true });
+    await Auth.confirmSignUp(this.state.username, this.state.authCode)
       .then(() => {
         this.props.navigation.navigate('App');
         console.log('Confirm user sign up success!!');
       })
       .catch(err => console.log('Error confirming signing up user: ', err));
+    this.setState({ loading: false });
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Username:</Text>
+        <Text style={styles.label}>USERNAME:</Text>
         <Input
           placeholder="Bob"
           onChangeText={text => this.onChangeText('username', text)}
           value={this.state.username}
         />
-        <Text>Email:</Text>
+        <Text style={styles.label}>EMAIL:</Text>
         <Input
           placeholder="bob@gmail.com"
           onChangeText={text => this.onChangeText('email', text)}
           value={this.state.email}
         />
-        <Text>Phone number:</Text>
+        <Text style={styles.label}>PHONE NUMBER:</Text>
         <Input
           placeholder="+61XXXXXXXX"
           onChangeText={text => this.onChangeText('phone_number', text)}
           value={this.state.phone_number}
         />
-        <Text>Password:</Text>
+        <Text style={styles.label}>PASSWORD:</Text>
         <Input
           placeholder="********"
           onChangeText={text => this.onChangeText('password', text)}
@@ -82,7 +87,7 @@ export default class SignUpScreen extends Component {
           secureTextEntry
         />
         <Button title="SIGN UP" onPress={this.signUp} style={{ backgroundColor: '#FFC50D' }} />
-        <Text>Enter SMS passcode here:</Text>
+        <Text style={styles.label}>ENTER SMS PASSCODE HERE:</Text>
         <Input
           placeholder="******"
           onChangeText={text => this.onChangeText('authCode', text)}
@@ -93,6 +98,7 @@ export default class SignUpScreen extends Component {
           onPress={this.confirmSignUp}
           style={{ backgroundColor: '#14B0BF' }}
         />
+        {this.state.loading && <ActivityIndicator />}
       </View>
     );
   }
@@ -104,6 +110,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  label: {
+    alignSelf: 'flex-start',
+    paddingLeft: '10%',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 10,
   },
 });
 

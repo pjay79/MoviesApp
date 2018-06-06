@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
@@ -16,19 +16,26 @@ export default class MoreScreen extends Component {
     headerLeft: null,
   };
 
-  signOut = () => {
-    Auth.signOut()
+  state = {
+    loading: false,
+  };
+
+  signOut = async () => {
+    this.setState({ loading: true });
+    await Auth.signOut()
       .then((data) => {
         this.props.navigation.navigate('Auth');
         console.log(data);
       })
       .catch(err => console.log(err));
+    this.setState({ loading: false });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <Button title="Sign Out" onPress={this.signOut} style={{ backgroundColor: '#0F303F' }} />
+        {this.state.loading && <ActivityIndicator />}
       </View>
     );
   }
