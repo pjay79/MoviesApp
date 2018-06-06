@@ -1,11 +1,13 @@
 import React from 'react';
-// import { Platform } from 'react-native';
+import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   createStackNavigator,
   createBottomTabNavigator,
   createSwitchNavigator,
 } from 'react-navigation';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -69,6 +71,36 @@ const MoreStack = createStackNavigator(
   },
 );
 
+const MoviesTabsAndroid = createMaterialBottomTabNavigator(
+  {
+    'All Movies': {
+      screen: AllMoviesStack,
+      navigationOptions: {
+        tabBarIcon: AllMoviesIcon,
+      },
+    },
+    'Add Movie': {
+      screen: AddMoviesStack,
+      navigationOptions: {
+        tabBarIcon: AddMoviesIcon,
+      },
+    },
+    More: {
+      screen: MoreStack,
+      navigationOptions: {
+        tabBarIcon: MoreIcon,
+      },
+    },
+  },
+  {
+    activeTintColor: '#FFC50D',
+    inactiveTintColor: 'white',
+    barStyle: {
+      backgroundColor: '#0F303F',
+    },
+  },
+);
+
 const MoviesTabs = createBottomTabNavigator(
   {
     'All Movies': {
@@ -105,7 +137,7 @@ const MoviesTabs = createBottomTabNavigator(
 const AppStack = createStackNavigator(
   {
     Movies: {
-      screen: MoviesTabs,
+      screen: Platform.OS === 'ios' ? MoviesTabs : MoviesTabsAndroid,
     },
   },
   {

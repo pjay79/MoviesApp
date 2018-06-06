@@ -23,7 +23,7 @@ export default class HomeScreen extends Component {
         </View>
         <View style={styles.middle}>
           <Text style={styles.description}>React Native</Text>
-          <Text style={styles.description}>ApolloGraphQL</Text>
+          <Text style={styles.description}>Apollo GraphQL</Text>
           <Text style={styles.description}>AWS AppSync & AWS Amplify</Text>
         </View>
         <View style={styles.bottom}>
@@ -46,7 +46,6 @@ export default class HomeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingVertical: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#0F303F',
