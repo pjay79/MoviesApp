@@ -23,6 +23,7 @@ export default class SignUpScreen extends Component {
     password: '',
     authCode: '',
     loading: false,
+    error: '',
   };
 
   onChangeText = (key, value) => {
@@ -30,32 +31,58 @@ export default class SignUpScreen extends Component {
   };
 
   signUp = async () => {
-    this.setState({ loading: true });
+    this.setState(prevState => ({ loading: !prevState.loading }));
     const {
       username, password, email, phone_number,
     } = this.state;
-    await Auth.signUp({
-      username,
-      password,
-      attributes: {
-        phone_number,
-        email,
-      },
-    })
-      .then(() => console.log('User sign up success!!'))
-      .catch(err => console.log('Error signing up user: ', err));
-    this.setState({ loading: false });
+    if (
+      this.state.username &&
+      this.state.password &&
+      this.state.phone_number &&
+      this.state.password
+    ) {
+      await Auth.signUp({
+        username,
+        password,
+        attributes: {
+          phone_number,
+          email,
+        },
+      })
+        .then(() => {
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log('User sign up success!!');
+        })
+        .catch((err) => {
+          this.setState({ error: err.message });
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log(err.message);
+        });
+    } else {
+      this.setState(prevState => ({ loading: !prevState.loading }));
+      this.setState({ error: 'Complete missing fields.' });
+    }
   };
 
   confirmSignUp = async () => {
-    this.setState({ loading: true });
-    await Auth.confirmSignUp(this.state.username, this.state.authCode)
-      .then(() => {
-        this.props.navigation.navigate('App');
-        console.log('Confirm user sign up success!!');
-      })
-      .catch(err => console.log('Error confirming signing up user: ', err));
-    this.setState({ loading: false });
+    this.setState(prevState => ({ loading: !prevState.loading }));
+    if (this.state.authCode) {
+      await Auth.confirmSignUp(this.state.username, this.state.authCode)
+        .then(() => {
+          this.props.navigation.navigate('App');
+
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log('Confirm user sign up success!!');
+        })
+        .catch((err) => {
+          this.setState({ error: err.message });
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log(err.message);
+        });
+    } else {
+      this.setState(prevState => ({ loading: !prevState.loading }));
+      this.setState({ error: 'Passcode is required.' });
+    }
   };
 
   render() {
@@ -99,6 +126,7 @@ export default class SignUpScreen extends Component {
           style={{ backgroundColor: '#14B0BF' }}
         />
         {this.state.loading && <ActivityIndicator />}
+        <Text style={styles.error}>{this.state.error}</Text>
       </View>
     );
   }
@@ -117,6 +145,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 2,
     fontSize: 10,
+  },
+  error: {
+    marginTop: 10,
+    paddingHorizontal: '10%',
+    color: 'red',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 12,
   },
 });
 

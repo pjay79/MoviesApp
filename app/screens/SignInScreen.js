@@ -22,6 +22,7 @@ export default class SignInScreen extends Component {
     authCode: '',
     user: {},
     loading: false,
+    error: '',
   };
 
   onChangeText = (key, value) => {
@@ -29,27 +30,45 @@ export default class SignInScreen extends Component {
   };
 
   signIn = async () => {
-    this.setState({ loading: true });
-    await Auth.signIn(this.state.username, this.state.password)
-      .then((user) => {
-        this.setState({ user });
-        // Skip MFA with this...
-        this.props.navigation.navigate('App');
-        console.log(user);
-      })
-      .catch(err => console.log(err));
-    this.setState({ loading: false });
+    this.setState(prevState => ({ loading: !prevState.loading }));
+    if (this.state.username && this.state.password) {
+      await Auth.signIn(this.state.username, this.state.password)
+        .then((user) => {
+          this.setState({ user });
+          // Skip MFA with this...
+          this.props.navigation.navigate('App');
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log(user);
+        })
+        .catch((err) => {
+          this.setState({ error: err.message });
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log(err.message);
+        });
+    } else {
+      this.setState(prevState => ({ loading: !prevState.loading }));
+      this.setState({ error: 'Complete missing fields.' });
+    }
   };
 
   confirmSignIn = async () => {
-    this.setState({ loading: true });
-    await Auth.confirmSignIn(this.state.user, this.state.authCode, 'SMS_MFA')
-      .then((data) => {
-        this.props.navigation.navigate('App');
-        console.log(data);
-      })
-      .catch(err => console.log(err));
-    this.setState({ loading: false });
+    this.setState(prevState => ({ loading: !prevState.loading }));
+    if (this.state.authCode) {
+      await Auth.confirmSignIn(this.state.user, this.state.authCode, 'SMS_MFA')
+        .then((data) => {
+          this.props.navigation.navigate('App');
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log(data);
+        })
+        .catch((err) => {
+          this.setState({ error: err.message });
+          this.setState(prevState => ({ loading: !prevState.loading }));
+          console.log(err.message);
+        });
+    } else {
+      this.setState(prevState => ({ loading: !prevState.loading }));
+      this.setState({ error: 'Passcode is required.' });
+    }
   };
 
   render() {
@@ -82,6 +101,7 @@ export default class SignInScreen extends Component {
           style={{ backgroundColor: '#14B0BF' }}
         />
         {this.state.loading && <ActivityIndicator />}
+        <Text style={styles.error}>{this.state.error}</Text>
       </View>
     );
   }
@@ -100,6 +120,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 2,
     fontSize: 10,
+  },
+  error: {
+    marginTop: 10,
+    paddingHorizontal: '10%',
+    color: 'red',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 12,
   },
 });
 
