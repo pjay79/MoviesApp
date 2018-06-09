@@ -18,7 +18,7 @@ export default class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.top}>
-          <Text style={styles.title}>Cinematica</Text>
+          <Text style={styles.title}>moviesapp</Text>
           <Image source={require('../assets/images/icon.png')} />
         </View>
         <View style={styles.middle}>

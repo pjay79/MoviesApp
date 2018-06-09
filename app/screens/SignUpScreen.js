@@ -54,8 +54,8 @@ export default class SignUpScreen extends Component {
           console.log('User sign up success!!');
         })
         .catch((err) => {
-          this.setState({ error: err.message });
           this.setState(prevState => ({ loading: !prevState.loading }));
+          this.setState({ error: err.message });
           console.log(err.message);
         });
     } else {
@@ -70,13 +70,11 @@ export default class SignUpScreen extends Component {
       await Auth.confirmSignUp(this.state.username, this.state.authCode)
         .then(() => {
           this.props.navigation.navigate('App');
-
-          this.setState(prevState => ({ loading: !prevState.loading }));
           console.log('Confirm user sign up success!!');
         })
         .catch((err) => {
-          this.setState({ error: err.message });
           this.setState(prevState => ({ loading: !prevState.loading }));
+          this.setState({ error: err.message });
           console.log(err.message);
         });
     } else {

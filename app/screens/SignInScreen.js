@@ -35,14 +35,12 @@ export default class SignInScreen extends Component {
       await Auth.signIn(this.state.username, this.state.password)
         .then((user) => {
           this.setState({ user });
-          // Skip MFA with this...
           this.props.navigation.navigate('App');
-          this.setState(prevState => ({ loading: !prevState.loading }));
           console.log(user);
         })
         .catch((err) => {
-          this.setState({ error: err.message });
           this.setState(prevState => ({ loading: !prevState.loading }));
+          this.setState({ error: err.message });
           console.log(err.message);
         });
     } else {
@@ -57,12 +55,11 @@ export default class SignInScreen extends Component {
       await Auth.confirmSignIn(this.state.user, this.state.authCode, 'SMS_MFA')
         .then((data) => {
           this.props.navigation.navigate('App');
-          this.setState(prevState => ({ loading: !prevState.loading }));
           console.log(data);
         })
         .catch((err) => {
-          this.setState({ error: err.message });
           this.setState(prevState => ({ loading: !prevState.loading }));
+          this.setState({ error: err.message });
           console.log(err.message);
         });
     } else {
@@ -88,7 +85,7 @@ export default class SignInScreen extends Component {
           secureTextEntry
         />
         <Button title="SIGN IN" onPress={this.signIn} style={{ backgroundColor: '#FFC50D' }} />
-        <Text style={styles.label}>Enter SMS passcode here:</Text>
+        <Text style={styles.label}>ENTER SMS PASSCODE HERE:</Text>
         <Input
           placeholder="******"
           onChangeText={text => this.onChangeText('authCode', text)}

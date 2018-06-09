@@ -28,7 +28,6 @@ export default class MoreScreen extends Component {
         console.log(data);
       })
       .catch(err => console.log(err));
-    this.setState({ loading: false });
   };
 
   render() {
