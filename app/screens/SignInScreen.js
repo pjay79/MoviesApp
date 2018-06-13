@@ -19,7 +19,6 @@ export default class SignInScreen extends Component {
   state = {
     username: '',
     password: '',
-    authCode: '',
     user: {},
     loading: false,
     error: '',
@@ -30,41 +29,24 @@ export default class SignInScreen extends Component {
   };
 
   signIn = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading }));
+    this.setState(prevState => ({ loading: !prevState.loading, error: '' }));
     if (this.state.username && this.state.password) {
       await Auth.signIn(this.state.username, this.state.password)
         .then((user) => {
           this.setState({ user });
           this.props.navigation.navigate('App');
-          console.log(user);
+          console.log(this.state.user);
         })
-        .catch((err) => {
-          this.setState(prevState => ({ loading: !prevState.loading }));
-          this.setState({ error: err.message });
-          console.log(err.message);
+        .catch((error) => {
+          this.setState(prevState => ({ loading: !prevState.loading, error: error.message }));
+          console.log(this.state.error);
         });
     } else {
-      this.setState(prevState => ({ loading: !prevState.loading }));
-      this.setState({ error: 'Complete missing fields.' });
-    }
-  };
-
-  confirmSignIn = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading }));
-    if (this.state.authCode) {
-      await Auth.confirmSignIn(this.state.user, this.state.authCode, 'SMS_MFA')
-        .then((data) => {
-          this.props.navigation.navigate('App');
-          console.log(data);
-        })
-        .catch((err) => {
-          this.setState(prevState => ({ loading: !prevState.loading }));
-          this.setState({ error: err.message });
-          console.log(err.message);
-        });
-    } else {
-      this.setState(prevState => ({ loading: !prevState.loading }));
-      this.setState({ error: 'Passcode is required.' });
+      this.setState(prevState => ({
+        loading: !prevState.loading,
+        error: 'Complete missing fields',
+      }));
+      console.log(this.state.error);
     }
   };
 
@@ -85,18 +67,6 @@ export default class SignInScreen extends Component {
           secureTextEntry
         />
         <Button title="SIGN IN" onPress={this.signIn} style={{ backgroundColor: '#FFC50D' }} />
-        <Text style={styles.label}>ENTER SMS PASSCODE HERE:</Text>
-        <Input
-          placeholder="******"
-          onChangeText={text => this.onChangeText('authCode', text)}
-          value={this.state.authCode}
-          secureTextEntry
-        />
-        <Button
-          title="CONFIRM SIGN IN"
-          onPress={this.confirmSignIn}
-          style={{ backgroundColor: '#14B0BF' }}
-        />
         {this.state.loading && <ActivityIndicator />}
         <Text style={styles.error}>{this.state.error}</Text>
       </View>

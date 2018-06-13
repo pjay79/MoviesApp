@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
+import { graphql } from 'react-apollo';
+import uuidV4 from 'uuid/v4';
+import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-export default class SignUpScreen extends Component {
+import CreateUser from '../graphql/mutations/CreateUser';
+
+class SignUpScreen extends Component {
   static navigationOptions = {
     title: 'Sign Up',
     headerStyle: {
@@ -24,6 +29,7 @@ export default class SignUpScreen extends Component {
     authCode: '',
     loading: false,
     error: '',
+    status: '',
   };
 
   onChangeText = (key, value) => {
@@ -31,7 +37,7 @@ export default class SignUpScreen extends Component {
   };
 
   signUp = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading }));
+    this.setState(prevState => ({ loading: !prevState.loading, error: '' }));
     const {
       username, password, email, phone_number,
     } = this.state;
@@ -50,37 +56,59 @@ export default class SignUpScreen extends Component {
         },
       })
         .then(() => {
-          this.setState(prevState => ({ loading: !prevState.loading }));
-          console.log('User sign up success!!');
+          this.setState(prevState => ({
+            loading: !prevState.loading,
+            status: 'Sign up confirmation pending...',
+          }));
+          console.log(this.state.status);
         })
-        .catch((err) => {
-          this.setState(prevState => ({ loading: !prevState.loading }));
-          this.setState({ error: err.message });
-          console.log(err.message);
+        .catch((error) => {
+          this.setState(prevState => ({ loading: !prevState.loading, error: error.message }));
+          console.log(this.state.error);
         });
     } else {
-      this.setState(prevState => ({ loading: !prevState.loading }));
-      this.setState({ error: 'Complete missing fields.' });
+      this.setState(prevState => ({
+        loading: !prevState.loading,
+        error: 'Complete missing fields.',
+      }));
     }
   };
 
   confirmSignUp = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading }));
+    this.setState(prevState => ({ loading: !prevState.loading, error: '', status: '' }));
     if (this.state.authCode) {
       await Auth.confirmSignUp(this.state.username, this.state.authCode)
         .then(() => {
-          this.props.navigation.navigate('App');
-          console.log('Confirm user sign up success!!');
+          this.addUser();
+          this.setState(prevState => ({
+            loading: !prevState.loading,
+            status: 'Sign up successful!',
+            username: '',
+            email: '',
+            phone_number: '',
+            password: '',
+            authCode: '',
+          }));
+          console.log(this.state.status);
         })
-        .catch((err) => {
-          this.setState(prevState => ({ loading: !prevState.loading }));
-          this.setState({ error: err.message });
-          console.log(err.message);
+        .catch((error) => {
+          this.setState(prevState => ({ loading: !prevState.loading, error: error.message }));
+          console.log(this.state.error);
         });
     } else {
-      this.setState(prevState => ({ loading: !prevState.loading }));
-      this.setState({ error: 'Passcode is required.' });
+      this.setState(prevState => ({ loading: !prevState.loading, error: 'Passcode is required.' }));
     }
+  };
+
+  addUser = () => {
+    const { username } = this.state;
+    const id = uuidV4();
+    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
+    this.props.onAddUser({
+      id,
+      username,
+      createdAt,
+    });
   };
 
   render() {
@@ -112,7 +140,7 @@ export default class SignUpScreen extends Component {
           secureTextEntry
         />
         <Button title="SIGN UP" onPress={this.signUp} style={{ backgroundColor: '#FFC50D' }} />
-        <Text style={styles.label}>ENTER SMS PASSCODE HERE:</Text>
+        <Text style={styles.label}>ENTER VERIFICATION CODE HERE:</Text>
         <Input
           placeholder="******"
           onChangeText={text => this.onChangeText('authCode', text)}
@@ -124,7 +152,10 @@ export default class SignUpScreen extends Component {
           style={{ backgroundColor: '#14B0BF' }}
         />
         {this.state.loading && <ActivityIndicator />}
-        <Text style={styles.error}>{this.state.error}</Text>
+        <Text style={this.state.error ? styles.error : styles.status}>
+          {this.state.error}
+          {this.state.status}
+        </Text>
       </View>
     );
   }
@@ -152,10 +183,34 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     fontSize: 12,
   },
+  status: {
+    marginTop: 10,
+    paddingHorizontal: '10%',
+    color: 'green',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 12,
+  },
 });
 
+export default graphql(CreateUser, {
+  props: props => ({
+    onAddUser: user =>
+      props.mutate({
+        variables: user,
+        optimisticResponse: () => ({
+          createUser: {
+            ...user,
+            __typename: 'User',
+          },
+        }),
+      }),
+  }),
+})(SignUpScreen);
+
 SignUpScreen.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
+  // navigation: PropTypes.shape({
+  //   navigate: PropTypes.func.isRequired,
+  // }).isRequired,
+  onAddUser: PropTypes.func.isRequired,
 };
