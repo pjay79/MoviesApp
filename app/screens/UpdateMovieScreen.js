@@ -38,6 +38,7 @@ class UpdateMovieScreen extends Component {
     director: '',
     author: '',
     likes: null,
+    error: '',
   };
 
   componentDidMount() {
@@ -65,21 +66,26 @@ class UpdateMovieScreen extends Component {
   };
 
   updateMovie = () => {
+    this.setState({ error: '' });
     const {
       id, title, genre, director, author, likes,
     } = this.state;
     const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
-    this.props.onUpdate({
-      id,
-      title,
-      genre,
-      director,
-      author,
-      createdAt,
-      likes,
-    });
-    console.log(`The movie "${title}" has been updated.`);
-    this.props.navigation.navigate('All');
+    if (title && genre && director) {
+      this.props.onUpdate({
+        id,
+        title,
+        genre,
+        director,
+        author,
+        createdAt,
+        likes,
+      });
+      console.log(`The movie "${title}" has been updated.`);
+      this.props.navigation.navigate('All');
+    } else {
+      this.setState({ error: 'Complete missing fields.' });
+    }
   };
 
   render() {
@@ -108,6 +114,7 @@ class UpdateMovieScreen extends Component {
           onPress={this.updateMovie}
           style={{ backgroundColor: '#0F303F' }}
         />
+        <Text style={styles.error}>{this.state.error}</Text>
       </View>
     );
   }
@@ -118,6 +125,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  error: {
+    marginTop: 10,
+    paddingHorizontal: '10%',
+    color: 'red',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 12,
   },
 });
 

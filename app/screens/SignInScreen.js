@@ -30,8 +30,9 @@ export default class SignInScreen extends Component {
 
   signIn = async () => {
     this.setState(prevState => ({ loading: !prevState.loading, error: '' }));
-    if (this.state.username && this.state.password) {
-      await Auth.signIn(this.state.username, this.state.password)
+    const { username, password } = this.state;
+    if (username && password) {
+      await Auth.signIn(username, password)
         .then((user) => {
           this.setState({ user });
           this.props.navigation.navigate('App');

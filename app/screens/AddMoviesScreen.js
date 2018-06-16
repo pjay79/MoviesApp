@@ -28,6 +28,8 @@ class AddMoviesScreen extends Component {
     genre: '',
     director: '',
     user: '',
+    error: '',
+    status: '',
   };
 
   componentDidMount() {
@@ -47,27 +49,33 @@ class AddMoviesScreen extends Component {
   };
 
   addMovie = () => {
+    this.setState({ error: '' });
     const {
       title, genre, director, user,
     } = this.state;
     const id = uuidV4();
     const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
-    this.props.onAddMovie({
-      id,
-      title,
-      genre,
-      director,
-      author: user,
-      createdAt,
-      likes: 0,
-    });
-    console.log(`The movie "${title}" has been added.`);
-    console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${user}`);
-    this.setState({
-      title: '',
-      genre: '',
-      director: '',
-    });
+    if ((title, genre, director)) {
+      this.props.onAddMovie({
+        id,
+        title,
+        genre,
+        director,
+        author: user,
+        createdAt,
+        likes: 0,
+      });
+      this.setState({
+        title: '',
+        genre: '',
+        director: '',
+        status: 'Movie added!',
+      });
+      console.log(`The movie "${title}" has been added.`);
+      console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${user}`);
+    } else {
+      this.setState({ error: 'Complete missing fields.' });
+    }
   };
 
   render() {
@@ -92,6 +100,10 @@ class AddMoviesScreen extends Component {
           value={this.state.director}
         />
         <Button title="Add Movie" onPress={this.addMovie} style={{ backgroundColor: '#0F303F' }} />
+        <Text style={this.state.error ? styles.error : styles.status}>
+          {this.state.error}
+          {this.state.status}
+        </Text>
       </View>
     );
   }
@@ -102,6 +114,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  error: {
+    marginTop: 10,
+    paddingHorizontal: '10%',
+    color: 'red',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 12,
+  },
+  status: {
+    marginTop: 10,
+    paddingHorizontal: '10%',
+    color: 'green',
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    fontSize: 12,
   },
 });
 

@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
-import { graphql } from 'react-apollo';
-import uuidV4 from 'uuid/v4';
-import moment from 'moment';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-import CreateUser from '../graphql/mutations/CreateUser';
-
-class SignUpScreen extends Component {
+export default class SignUpScreen extends Component {
   static navigationOptions = {
     title: 'Sign Up',
     headerStyle: {
@@ -41,12 +35,7 @@ class SignUpScreen extends Component {
     const {
       username, password, email, phone_number,
     } = this.state;
-    if (
-      this.state.username &&
-      this.state.password &&
-      this.state.phone_number &&
-      this.state.password
-    ) {
+    if (username && password && email && phone_number) {
       await Auth.signUp({
         username,
         password,
@@ -55,11 +44,12 @@ class SignUpScreen extends Component {
           email,
         },
       })
-        .then(() => {
+        .then((data) => {
           this.setState(prevState => ({
             loading: !prevState.loading,
             status: 'Sign up confirmation pending...',
           }));
+          console.log(data);
           console.log(this.state.status);
         })
         .catch((error) => {
@@ -78,8 +68,7 @@ class SignUpScreen extends Component {
     this.setState(prevState => ({ loading: !prevState.loading, error: '', status: '' }));
     if (this.state.authCode) {
       await Auth.confirmSignUp(this.state.username, this.state.authCode)
-        .then(() => {
-          this.addUser();
+        .then((data) => {
           this.setState(prevState => ({
             loading: !prevState.loading,
             status: 'Sign up successful!',
@@ -89,6 +78,7 @@ class SignUpScreen extends Component {
             password: '',
             authCode: '',
           }));
+          console.log(data);
           console.log(this.state.status);
         })
         .catch((error) => {
@@ -98,17 +88,6 @@ class SignUpScreen extends Component {
     } else {
       this.setState(prevState => ({ loading: !prevState.loading, error: 'Passcode is required.' }));
     }
-  };
-
-  addUser = () => {
-    const { username } = this.state;
-    const id = uuidV4();
-    const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
-    this.props.onAddUser({
-      id,
-      username,
-      createdAt,
-    });
   };
 
   render() {
@@ -192,25 +171,3 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
-export default graphql(CreateUser, {
-  props: props => ({
-    onAddUser: user =>
-      props.mutate({
-        variables: user,
-        optimisticResponse: () => ({
-          createUser: {
-            ...user,
-            __typename: 'User',
-          },
-        }),
-      }),
-  }),
-})(SignUpScreen);
-
-SignUpScreen.propTypes = {
-  // navigation: PropTypes.shape({
-  //   navigate: PropTypes.func.isRequired,
-  // }).isRequired,
-  onAddUser: PropTypes.func.isRequired,
-};

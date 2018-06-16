@@ -74,7 +74,8 @@ class AllMoviesScreen extends Component {
   };
 
   movieQuery = () => {
-    const results = this.state.moviesData.filter(movie => movie.title.includes(this.state.query));
+    const results = this.state.moviesData.filter(movie =>
+      movie.title.toLowerCase().includes(this.state.query.toLowerCase()));
     this.setState({ movies: results });
   };
 
