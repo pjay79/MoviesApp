@@ -55,7 +55,7 @@ class AddMoviesScreen extends Component {
     } = this.state;
     const id = uuidV4();
     const createdAt = moment().format('MMMM Do YYYY, h:mm:ss a');
-    if ((title, genre, director)) {
+    if (title && genre && director) {
       this.props.onAddMovie({
         id,
         title,
@@ -71,6 +71,7 @@ class AddMoviesScreen extends Component {
         director: '',
         status: 'Movie added!',
       });
+      setTimeout(() => this.setState({ status: '' }), 1000);
       console.log(`The movie "${title}" has been added.`);
       console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${user}`);
     } else {
