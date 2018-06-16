@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
@@ -51,7 +51,7 @@ class AllMoviesScreen extends Component {
         this.setState({ user: data.username });
         console.log(`Current user: ${this.state.user}`);
       })
-      .catch(err => console.log('error: ', err));
+      .catch(error => console.log(`Error: ${error.message}`));
   };
 
   getAllMovies = () => {
@@ -63,7 +63,7 @@ class AllMoviesScreen extends Component {
   };
 
   addQuery = (query) => {
-    if (!query || query === '') {
+    if (query === '') {
       this.setState({ loading: false });
       this.setState({ movies: this.props.movies });
     } else {
@@ -139,7 +139,7 @@ class AllMoviesScreen extends Component {
   );
 
   render() {
-    if (!this.state.query || this.state.query === '') {
+    if (this.state.query === '') {
       const { movies } = this.props;
       const data = _.orderBy(movies, ['title'], ['asc']);
       return (

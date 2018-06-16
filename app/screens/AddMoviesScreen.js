@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql } from 'react-apollo';
 import uuidV4 from 'uuid/v4';
@@ -45,7 +45,7 @@ class AddMoviesScreen extends Component {
       .then((data) => {
         this.setState({ user: data.username });
       })
-      .catch(err => console.log('error: ', err));
+      .catch(error => console.log(`Error: ${error.message}`));
   };
 
   addMovie = () => {
@@ -73,9 +73,10 @@ class AddMoviesScreen extends Component {
       });
       setTimeout(() => this.setState({ status: '' }), 1000);
       console.log(`The movie "${title}" has been added.`);
-      console.log(`Details: id: ${id}`, `createdAt: ${createdAt}`, `by ${user}`);
+      console.log(`Details - id: ${id}, createdAt: ${createdAt}, by ${user}`);
     } else {
       this.setState({ error: 'Complete missing fields.' });
+      setTimeout(() => this.setState({ error: '' }), 1000);
     }
   };
 

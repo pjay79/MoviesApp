@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
 

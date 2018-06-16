@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import Ionicons from 'react-native-vector-icons/Ionicons';

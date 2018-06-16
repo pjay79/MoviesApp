@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Platform, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import { graphql, compose } from 'react-apollo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,8 +21,6 @@ class DetailsScreen extends Component {
     title: navigation.getParam('movie').title,
     headerStyle: {
       backgroundColor: '#0F303F',
-      elevation: 0,
-      borderBottomWidth: 0,
     },
     headerLeft: (
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -63,7 +61,6 @@ class DetailsScreen extends Component {
     this.getUser();
     this.getMovieDetails();
     this.props.subscribeToNewReviews();
-    console.log(this.props.reviews);
   }
 
   onChangeText = (key, value) => {
@@ -75,7 +72,7 @@ class DetailsScreen extends Component {
       .then((data) => {
         this.setState({ user: data.username });
       })
-      .catch(err => console.log('error: ', err));
+      .catch(error => console.log(`Error: ${error.message}`));
   };
 
   getMovieDetails = () => {
@@ -94,7 +91,7 @@ class DetailsScreen extends Component {
     });
   };
 
-  toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
+  toggleModal = () => this.setState(prevState => ({ isModalVisible: !prevState.isModalVisible }));
 
   addReview = () => {
     const { rating, content } = this.state;

@@ -9,8 +9,6 @@ export default class SignUpScreen extends Component {
     title: 'Sign Up',
     headerStyle: {
       backgroundColor: '#0F303F',
-      elevation: 0,
-      borderBottomWidth: 0,
     },
     headerTintColor: 'white',
   };
@@ -31,7 +29,7 @@ export default class SignUpScreen extends Component {
   };
 
   signUp = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading, error: '' }));
+    this.setState({ loading: true, error: '' });
     const {
       username, password, email, phone_number,
     } = this.state;
@@ -45,48 +43,38 @@ export default class SignUpScreen extends Component {
         },
       })
         .then((data) => {
-          this.setState(prevState => ({
-            loading: !prevState.loading,
-            status: 'Sign up confirmation pending...',
-          }));
+          this.setState({ loading: false, status: 'User confirmation pending...' });
           console.log(data);
-          console.log(this.state.status);
         })
         .catch((error) => {
-          this.setState(prevState => ({ loading: !prevState.loading, error: error.message }));
-          console.log(this.state.error);
+          this.setState({ loading: false, error: error.message });
         });
     } else {
-      this.setState(prevState => ({
-        loading: !prevState.loading,
-        error: 'Complete missing fields.',
-      }));
+      this.setState({ loading: false, error: 'Complete missing fields.' });
     }
   };
 
   confirmSignUp = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading, error: '', status: '' }));
+    this.setState({ loading: true, error: '', status: '' });
+    const { username, authCode } = this.state;
     if (this.state.authCode) {
-      await Auth.confirmSignUp(this.state.username, this.state.authCode)
-        .then((data) => {
-          this.setState(prevState => ({
-            loading: !prevState.loading,
+      await Auth.confirmSignUp(username, authCode)
+        .then(() => {
+          this.setState({
+            loading: false,
             status: 'Sign up successful!',
             username: '',
             email: '',
             phone_number: '',
             password: '',
             authCode: '',
-          }));
-          console.log(data);
-          console.log(this.state.status);
+          });
         })
         .catch((error) => {
-          this.setState(prevState => ({ loading: !prevState.loading, error: error.message }));
-          console.log(this.state.error);
+          this.setState({ loading: false, error: error.message });
         });
     } else {
-      this.setState(prevState => ({ loading: !prevState.loading, error: 'Passcode is required.' }));
+      this.setState({ loading: false, error: 'Passcode is required.' });
     }
   };
 

@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, ActivityIndicator, StyleSheet, AsyncStorage } from 'react-native';
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 
 class LoadingScreen extends Component {
@@ -14,7 +14,7 @@ class LoadingScreen extends Component {
 
   checkIntro = async () => {
     const value = await AsyncStorage.getItem('@SKIP_INTRO');
-    if (value !== null || value === 'true') {
+    if (value === 'true') {
       this.checkUser();
     } else {
       this.props.navigation.navigate('Intro');
@@ -27,9 +27,9 @@ class LoadingScreen extends Component {
         this.props.navigation.navigate(user ? 'App' : 'Auth');
         console.log('Cognito: ', user);
       })
-      .catch((err) => {
+      .catch((error) => {
         this.props.navigation.navigate('Auth');
-        console.log(err);
+        console.log(error.message);
       });
   };
 

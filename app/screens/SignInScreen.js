@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
 import { Auth } from 'aws-amplify';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -10,8 +10,6 @@ export default class SignInScreen extends Component {
     title: 'Sign In',
     headerStyle: {
       backgroundColor: '#0F303F',
-      elevation: 0,
-      borderBottomWidth: 0,
     },
     headerTintColor: 'white',
   };
@@ -29,7 +27,7 @@ export default class SignInScreen extends Component {
   };
 
   signIn = async () => {
-    this.setState(prevState => ({ loading: !prevState.loading, error: '' }));
+    this.setState({ loading: true, error: '' });
     const { username, password } = this.state;
     if (username && password) {
       await Auth.signIn(username, password)
@@ -39,15 +37,10 @@ export default class SignInScreen extends Component {
           console.log(this.state.user);
         })
         .catch((error) => {
-          this.setState(prevState => ({ loading: !prevState.loading, error: error.message }));
-          console.log(this.state.error);
+          this.setState({ loading: false, error: error.message });
         });
     } else {
-      this.setState(prevState => ({
-        loading: !prevState.loading,
-        error: 'Complete missing fields',
-      }));
-      console.log(this.state.error);
+      this.setState({ loading: false, error: 'Complete missing fields' });
     }
   };
 

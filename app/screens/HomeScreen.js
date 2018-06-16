@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, AsyncStorage, Image } from 'react-native';
-import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 import Button from '../components/Button';
 
@@ -11,7 +11,7 @@ export default class HomeScreen extends Component {
 
   componentDidMount() {
     SplashScreen.hide();
-    AsyncStorage.setItem('@SKIP_INTRO', JSON.stringify('true'));
+    AsyncStorage.setItem('@SKIP_INTRO', 'true');
   }
 
   render() {
