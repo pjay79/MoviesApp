@@ -1,5 +1,3 @@
-![rn](https://user-images.githubusercontent.com/14052885/41507669-bbd248e8-727a-11e8-949e-312d3ff36ee6.png)
-
 # MoviesApp
 
 React Native, AWS AppSync, AWS Amplify, AWS Cognito, GraphQL, DynamoDB
@@ -154,7 +152,7 @@ export default {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graphqlEndpoint: 'ENTER_ENDPOINT',  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;region: 'ENTER_REGION',  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authenticationType: 'AMAZON_COGNITO_USER_POOLS',  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apiKey: 'ENTER_APIKEY',  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apiKey: 'null',  
 };
 
 ### Launch
