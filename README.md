@@ -2,6 +2,8 @@
 
 React Native, AWS AppSync, AWS Amplify, AWS Cognito, GraphQL, DynamoDB
 
+![screenflow](https://user-images.githubusercontent.com/14052885/41508913-19d8108a-728f-11e8-9c49-7a40f4bb3799.jpeg)
+
 ## Screenshots
 
 ### iOS
