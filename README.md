@@ -20,7 +20,6 @@ React Native, AWS AppSync, AWS Cognito, AWS Amplify, GraphQL, DynamoDB
 ![simulator screen shot - iphone x - 2018-06-18 at 16 08 47](https://user-images.githubusercontent.com/14052885/41520896-3c599eb0-7313-11e8-8cdc-f1442ee31b8c.png)
 ![simulator screen shot - iphone x - 2018-06-18 at 16 09 44](https://user-images.githubusercontent.com/14052885/41520897-3c915b48-7313-11e8-8018-4c2cf58c80a9.png)
 ![simulator screen shot - iphone x - 2018-06-18 at 16 09 47](https://user-images.githubusercontent.com/14052885/41520898-3cc73862-7313-11e8-9fd6-b2f827a885fe.png)
-![simulator screen shot - iphone x - 2018-06-18 at 16 09 54](https://user-images.githubusercontent.com/14052885/41520899-3cfcd6de-7313-11e8-9f0f-51db9727f5a7.png)
 
 ## Technology stack:
 
@@ -74,7 +73,10 @@ https://aws.amazon.com/free/
 
 `npm install -g awsmobile-cli`  
 `awsmobile configure`  
-`awsmobile init` (in the project folder)  
+`awsmobile init` (in the project folder)
+
+![awsmobile2](https://user-images.githubusercontent.com/14052885/41520984-b04a9234-7313-11e8-9d6e-ead22f033725.jpeg)
+
 `awsmobile user-signin enable`  
 `awsmobile push`  
 `awsmobile console` (opens the aws console in browser)
