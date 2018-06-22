@@ -1,6 +1,7 @@
 # MoviesApp
 
-React Native, AWS AppSync, AWS Amplify, AWS Cognito, GraphQL, DynamoDB
+React Native, AWS AppSync, AWS Amplify, AWS Cognito, GraphQL, DynamoDB.
+Please note: this is a work still in progress, and many features are not fully developed yet.
 
 ![screenflow](https://user-images.githubusercontent.com/14052885/41508913-19d8108a-728f-11e8-9c49-7a40f4bb3799.jpeg)
 
