@@ -64,11 +64,9 @@ class AllMoviesScreen extends Component {
 
   addQuery = (query) => {
     if (query === '') {
-      this.setState({ loading: false });
-      this.setState({ movies: this.props.movies });
+      this.setState({ loading: false, movies: this.props.movies });
     } else {
-      this.setState({ loading: true });
-      this.setState({ query });
+      this.setState({ loading: true, query });
       this.movieQuery();
     }
   };
