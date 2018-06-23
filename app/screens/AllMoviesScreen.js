@@ -53,25 +53,16 @@ class AllMoviesScreen extends Component {
       .catch(error => console.log(`Error: ${error.message}`));
   };
 
-  getAllMovies = () => {
-    this.setState({ movies: this.props.movies, moviesData: this.props.movies });
-  };
-
-  deleteMovie = (item) => {
-    this.props.onDelete(item);
-  };
-
   addQuery = (query) => {
     if (query === '') {
       this.setState({ loading: false, movies: this.props.movies, moviesData: this.props.movies });
     } else {
-      this.setState({ loading: true, query }, () => {
-        this.movieQuery();
-      });
+      this.setState({ loading: true, query });
+      this.movieSearch();
     }
   };
 
-  movieQuery = () => {
+  movieSearch = () => {
     this.setState({ moviesData: this.props.movies });
     const results = this.state.moviesData.filter(movie =>
       movie.title.toLowerCase().includes(this.state.query.toLowerCase()));
@@ -79,8 +70,7 @@ class AllMoviesScreen extends Component {
   };
 
   clearQuery = () => {
-    this.setState({ query: '' });
-    this.getAllMovies();
+    this.setState({ query: '', movies: this.props.movies, moviesData: this.props.movies });
   };
 
   updateMovie = (item) => {
@@ -98,14 +88,11 @@ class AllMoviesScreen extends Component {
     });
   };
 
-  keyExtractor = item => item.id;
-
-  data = () => {
-    if (this.state.query === '') {
-      return this.props.movies;
-    }
-    return this.state.movies;
+  deleteMovie = (item) => {
+    this.props.onDelete(item);
   };
+
+  keyExtractor = item => item.id;
 
   renderItem = ({ item }) => (
     <View key={item.id} style={styles.itemWrapper}>
