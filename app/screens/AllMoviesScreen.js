@@ -36,7 +36,6 @@ class AllMoviesScreen extends Component {
 
   componentDidMount() {
     this.getUser();
-    this.getAllMovies();
     this.props.subscribeToNewMovies();
     SplashScreen.hide();
   }
@@ -64,10 +63,11 @@ class AllMoviesScreen extends Component {
 
   addQuery = (query) => {
     if (query === '') {
-      this.setState({ loading: false, movies: this.props.movies });
+      this.setState({ loading: false, movies: this.props.movies, moviesData: this.props.movies });
     } else {
-      this.setState({ loading: true, query });
-      this.movieQuery();
+      this.setState({ loading: true, query }, () => {
+        this.movieQuery();
+      });
     }
   };
 
@@ -80,6 +80,7 @@ class AllMoviesScreen extends Component {
   clearQuery = () => {
     this.setState({ query: '' });
     this.getAllMovies();
+    console.log(this.state.moviesData);
   };
 
   updateMovie = (item) => {
@@ -98,6 +99,13 @@ class AllMoviesScreen extends Component {
   };
 
   keyExtractor = item => item.id;
+
+  data = () => {
+    if (this.state.query === '') {
+      return this.props.movies;
+    }
+    return this.state.movies;
+  };
 
   renderItem = ({ item }) => (
     <View key={item.id} style={styles.itemWrapper}>
@@ -137,28 +145,14 @@ class AllMoviesScreen extends Component {
   );
 
   render() {
-    if (this.state.query === '') {
-      const { movies } = this.props;
-      const data = _.orderBy(movies, ['title'], ['asc']);
-      return (
-        <View style={styles.container}>
-          <FlatList
-            data={data}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.renderItem}
-            ItemSeparatorComponent={this.renderSeparator}
-            ListHeaderComponent={this.renderHeader}
-            keyboardShouldPersistTaps="handled"
-          />
-        </View>
-      );
-    }
-    const { movies } = this.state;
-    const data = _.orderBy(movies, ['title'], ['asc']);
     return (
       <View style={styles.container}>
         <FlatList
-          data={data}
+          data={
+            this.state.query === ''
+              ? _.orderBy(this.props.movies, ['title'], ['asc'])
+              : _.orderBy(this.state.movies, ['title'], ['asc'])
+          }
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ItemSeparatorComponent={this.renderSeparator}
