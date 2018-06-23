@@ -62,12 +62,12 @@ class AllMoviesScreen extends Component {
     }
   };
 
-  movieSearch = _.debounce(() => {
+  movieSearch = () => {
     this.setState({ moviesData: this.props.movies });
     const results = this.state.moviesData.filter(movie =>
       movie.title.toLowerCase().includes(this.state.query.toLowerCase()));
     this.setState({ movies: results });
-  }, 250);
+  };
 
   clearQuery = () => {
     this.setState({ query: '', movies: this.props.movies, moviesData: this.props.movies });
