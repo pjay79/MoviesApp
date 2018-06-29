@@ -24,25 +24,25 @@ Please note: this is a work still in progress, and many features are not fully d
 
 ## Technology stack:
 
-* aws-amplify
-* aws-amplify-react-native
-* aws-appsync
-* aws-appsync-react
-* aws-sdk
-* graphql-tag
-* lodash
-* moment
-* prop-types
-* react-apollo
-* react-native-app-intro-slider
-* react-native-elements
-* react-native-modal
-* react-native-splash-screen
-* react-native-vector-icons
-* react-navigation
-* react-navigation-material-bottom-tabs
-* react-navigation-tabs
-* uuid
+- aws-amplify
+- aws-amplify-react-native
+- aws-appsync
+- aws-appsync-react
+- aws-sdk
+- graphql-tag
+- lodash
+- moment
+- prop-types
+- react-apollo
+- react-native-app-intro-slider
+- react-native-elements
+- react-native-modal
+- react-native-splash-screen
+- react-native-vector-icons
+- react-navigation
+- react-navigation-material-bottom-tabs
+- react-navigation-tabs
+- uuid
 
 ## Installation
 
@@ -88,16 +88,16 @@ This project's source directory is 'app'.
 
 In the aws console **Services** section locate **AWS AppSync** and then do the following:
 
-* select **Create API**
+- select **Create API**
 
 ![appsync-starter](https://user-images.githubusercontent.com/14052885/41519711-0afcbaf6-730d-11e8-87d8-255a19960345.jpeg)
 
-* enter API name **AWS Movies App** and select authorization type to **Amazon Cognito User Pool**
+- enter API name **AWS Movies App** and select authorization type to **Amazon Cognito User Pool**
 
 ![appsync-settings](https://user-images.githubusercontent.com/14052885/41507521-184374f2-7277-11e8-9b26-ab5d22a56ba3.jpeg)
 ![appsync-settings-userpool](https://user-images.githubusercontent.com/14052885/41507522-18768892-7277-11e8-9c6b-355653347db1.jpeg)
 
-* select **Custom Schema**
+- select **Custom Schema**
 
 Paste the following into the Custom Schema box:
 
@@ -147,11 +147,11 @@ Back again in the AppSync console, find the Data Type **Query** and modify resol
 
 From your AppSync console:
 
-* select **DataSources**
-* select **ReviewTable**
-* select **Create index** in DynamoDB
-* select primary key **movieID**, and index name **movieID-index**
-* set read and write capacity to 1 unit each
+- select **DataSources**
+- select **ReviewTable**
+- select **Create index** in DynamoDB
+- select primary key **movieID**, and index name **movieID-index**
+- set read and write capacity to 1 unit each
 
 ![create-index](https://user-images.githubusercontent.com/14052885/41519854-f0a4d624-730d-11e8-89cc-c1b3a1ea5348.jpeg)
 
