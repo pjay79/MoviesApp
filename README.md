@@ -174,7 +174,7 @@ export default {
 
 ### AWS Cognito
 
-In the aws console **Services** section locate **Cognito** and select **Manage User Pools**. Here you can customise the user and authorisation settings.
+In the aws console **Services** section locate **Cognito** and select **Manage User Pools**. Here you can customise the user and authorisation settings. For this project **MFA** has been set to **OPTIONAL**.
 
 ![cognito-page](https://user-images.githubusercontent.com/14052885/41520257-1d1a67b2-7310-11e8-81a4-ae8696976e09.jpeg)
 
