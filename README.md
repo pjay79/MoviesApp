@@ -109,33 +109,35 @@ In the aws console **Services** section locate **AWS AppSync** and then do the f
 
 Paste the following into the Custom Schema box:
 
+```
 type Movie {  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: ID!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: String!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;genre: String!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;director: String!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reviews: [Review]  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;likes: Int!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author: String!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createdAt: String!  
+    id: ID!  
+    title: String!  
+    genre: String!  
+    director: String!  
+    reviews: [Review]  
+    likes: Int!  
+    author: String!  
+    createdAt: String!  
 }
 
 type Review {  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: ID!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;movieID: ID!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rating: Int!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content: String!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author: String!  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createdAt: String!  
+    id: ID!  
+    movieID: ID!  
+    rating: Int!  
+    content: String!  
+    author: String!  
+    createdAt: String!  
 }
 
 type Query {  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fetchMovie(id: ID!): Movie
+    fetchMovie(id: ID!): Movie
 }
 
 schema {  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query: Query  
+    query: Query  
 }
+```
 
 Select **Save** and then **Create Resources**, then select type **Movie** with table name **MovieTable**. Repeat the same process for type **Review** with table name **ReviewTable**.
 
@@ -173,12 +175,14 @@ Download the React Native AppSync.js file:
 
 Add the contents of this file to **app/aws-appsync.js** as follows:
 
+```
 export default {  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graphqlEndpoint: 'ENTER_ENDPOINT',  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;region: 'ENTER_REGION',  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authenticationType: 'AMAZON_COGNITO_USER_POOLS',  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apiKey: 'null',  
+    graphqlEndpoint: 'ENTER_ENDPOINT',  
+    region: 'ENTER_REGION',  
+    authenticationType: 'AMAZON_COGNITO_USER_POOLS',  
+    apiKey: 'null',  
 };
+```
 
 ### AWS Cognito
 
